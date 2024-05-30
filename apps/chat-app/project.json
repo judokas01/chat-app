@@ -1,0 +1,24 @@
+{
+  "name": "chat-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/chat-app/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "chat-app:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "chat-app:build:development"
+        },
+        "production": {
+          "buildTarget": "chat-app:build:production"
+        }
+      }
+    }
+  }
+}
