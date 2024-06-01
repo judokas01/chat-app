@@ -1,12 +1,22 @@
 {
   "root": true,
-  "ignorePatterns": ["**/*"],
-  "plugins": ["@nx"],
+  "ignorePatterns": ["dist", "*.d.ts"],
+  "plugins": ["@nrwl/nx", "no-only-tests", "pathnames"],
+  // "rules": {
+  //   "pathnames/match": [
+  //     "error",
+  //     {
+  //       "fileNames": "^[a-z1-9.]+(-[a-z1-9.]+)*$",
+  //       "folderNames": "^[a-z1-9.]+(-[a-z1-9.]+)*$",
+  //       "ignorePaths": "node_modules"
+  //     }
+  //   ]
+  // },
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "@nx/enforce-module-boundaries": [
+        "@nrwl/nx/enforce-module-boundaries": [
           "error",
           {
             "enforceBuildableLibDependency": true,
@@ -23,19 +33,105 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nx/typescript"],
-      "rules": {}
+      "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript",
+        "prettier",
+        "plugin:prettier/recommended"
+      ],
+      "plugins": ["sort-keys-fix", "simple-import-sort"],
+      "rules": {
+        "prefer-destructuring": [
+          "error",
+          {
+            "VariableDeclarator": {
+              "array": false,
+              "object": true
+            },
+            "AssignmentExpression": {
+              "array": false,
+              "object": false
+            }
+          }
+        ],
+        "lines-between-class-members": ["error", "always"],
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "import/order": "error",
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "argsIgnorePattern": "^_+",
+            "varsIgnorePattern": "^_+"
+          }
+        ],
+        "no-param-reassign": "error",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/ban-types": "warn",
+        "@typescript-eslint/no-explicit-any": "error",
+        "import/no-unresolved": "off",
+        "import/no-duplicates": "error",
+        "import/no-cycle": [
+          "error",
+          {
+            "ignoreExternal": true,
+            "maxDepth": 3
+          }
+        ],
+        "import/no-self-import": "error",
+        "no-only-tests/no-only-tests": "error",
+        "spaced-comment": ["error", "always"],
+        "padding-line-between-statements": [
+          "error",
+          {
+            "blankLine": "always",
+            "prev": "*",
+            "next": "function"
+          },
+          {
+            "blankLine": "always",
+            "prev": "block-like",
+            "next": "block-like"
+          },
+          {
+            "blankLine": "any",
+            "prev": "if",
+            "next": "if"
+          },
+          {
+            "blankLine": "always",
+            "prev": "import",
+            "next": "*"
+          },
+          {
+            "blankLine": "any",
+            "prev": "import",
+            "next": "import"
+          }
+        ],
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": ["enum", "enumMember"],
+            "format": ["PascalCase"]
+          }
+        ],
+        "no-restricted-syntax": [
+          "error",
+          {
+            "selector": "LogicalExpression[operator='&&'][parent.type='ExpressionStatement']",
+            "message": "Use 'if' statement instead of using logical && operator for conditional statements"
+          }
+        ],
+        "require-await": "error",
+        "sort-keys-fix/sort-keys-fix": "error"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],
-      "extends": ["plugin:@nx/javascript"],
-      "rules": {}
-    },
-    {
-      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
-      "env": {
-        "jest": true
-      },
+      "extends": ["plugin:@nrwl/nx/javascript"],
       "rules": {}
     }
   ]
