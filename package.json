@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "format": "prettier --write \"apps/**/*.ts\"",
-    "compose:up": "docker-compose -f ./dev-docker/docker-compose.yml --profile local-mongo up --remove-orphans"
+    "format": "prettier --write \"apps/**/*.ts*\"",
+    "code:check": "prettier --check \"apps/**/*.ts*\"",
+    "compose:up": "docker-compose -f ./dev-docker/docker-compose.yml --profile local-mongo up --remove-orphans",
+    "dev": "nx run-many -t serve"
   },
   "prisma": {
     "schema": "./apps/chat-app/src/infrastructure/prisma/schema.prisma"
