@@ -6,7 +6,10 @@
     "format": "prettier --write \"apps/**/*.ts*\"",
     "code:check": "prettier --check \"apps/**/*.ts*\"",
     "compose:up": "docker-compose -f ./dev-docker/docker-compose.yml --profile local-mongo up --remove-orphans",
-    "dev": "nx run-many -t serve"
+    "dev": "nx run-many -t serve",
+    "nest-generate": "sh -c 'yarn nx g @nx/nest:${0} ${1} --directory apps/chat-app/src/app/${1}'",
+    "change-dir": "cd ./apps/chat-app/",
+    "v3": "yarn change-dir && yarn nest-generate-v2"
   },
   "prisma": {
     "schema": "./apps/chat-app/src/infrastructure/prisma/schema.prisma"
