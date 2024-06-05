@@ -27,7 +27,7 @@ describe('AppController', () => {
 
         const found = await prisma.user.findFirst({
             where: {
-                id: '60d599cb001ef98000f2cad2',
+                id: saved.id,
             },
         })
 
