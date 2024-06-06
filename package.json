@@ -8,6 +8,10 @@
     "compose:up": "docker-compose -f ./dev-docker/docker-compose.yml --profile local-mongo up --remove-orphans",
     "dev": "nx run-many -t serve",
     "nest-generate": "sh -c 'yarn nx g @nx/nest:${0} ${1} --directory apps/chat-app/src/app/${1}'",
+    "nest-gen:resource": "nx g @nx/nest:resource",
+    "nest-gen:module": "nx g @nx/nest:module",
+    "nest-gen:controller": "nx g @nx/nest:controller",
+    "nest-gen:service": "nx g @nx/nest:service",
     "change-dir": "cd ./apps/chat-app/",
     "v3": "yarn change-dir && yarn nest-generate-v2"
   },
