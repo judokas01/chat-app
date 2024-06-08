@@ -14,10 +14,43 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  name      String?
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String              @id @default(auto()) @map("_id") @db.ObjectId
+  email             String
+  userName          String              @unique
+  password          String
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  UsersConverstaion UsersConverstaion[]
+  Message           Message[]
+}
+
+model UsersConverstaion {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  customName     String?
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String       @db.ObjectId
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversationId String       @db.ObjectId
+
+  @@unique([userId, conversationId])
+}
+
+model Conversation {
+  id                String              @id @default(auto()) @map("_id") @db.ObjectId
+  title             String
+  createdAt         DateTime            @default(now())
+  lastMessageAt     DateTime
+  messages          Message[]
+  UsersConverstaion UsersConverstaion[]
+}
+
+model Message {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  text           String
+  createdAt      DateTime     @default(now())
+  isRemoved      Boolean      @default(false)
+  authorId       String       @db.ObjectId
+  author         User         @relation(fields: [authorId], references: [id])
+  conversationId String       @db.ObjectId
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
 }
