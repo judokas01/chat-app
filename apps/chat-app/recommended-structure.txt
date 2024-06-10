@@ -1,0 +1,64 @@
+src/
+  ├── app.module.ts
+  ├── main.ts
+  ├── common/
+  │   ├── filters/
+  │   ├── guards/
+  │   ├── interceptors/
+  │   ├── middlewares/
+  │   ├── pipes/
+  │   ├── dto/
+  │   ├── interfaces/
+  │   ├── exceptions/
+  │   └── utils/
+  ├── prisma/
+  │   ├── prisma.module.ts
+  │   └── prisma.service.ts
+  ├── modules/
+  │   ├── user/
+  │   │   ├── controllers/
+  │   │   │   └── user.controller.ts
+  │   │   ├── services/
+  │   │   │   └── user.service.ts
+  │   │   ├── repositories/
+  │   │   │   └── user.repository.ts
+  │   │   ├── entities/
+  │   │   │   └── user.entity.ts
+  │   │   ├── dto/
+  │   │   │   ├── create-user.dto.ts
+  │   │   │   └── update-user.dto.ts
+  │   │   ├── interfaces/
+  │   │   │   └── user.interface.ts
+  │   │   └── user.module.ts
+  │   ├── product/
+  │   │   ├── controllers/
+  │   │   │   └── product.controller.ts
+  │   │   ├── services/
+  │   │   │   └── product.service.ts
+  │   │   ├── repositories/
+  │   │   │   └── product.repository.ts
+  │   │   ├── entities/
+  │   │   │   └── product.entity.ts
+  │   │   ├── dto/
+  │   │   │   ├── create-product.dto.ts
+  │   │   │   └── update-product.dto.ts
+  │   │   ├── interfaces/
+  │   │   │   └── product.interface.ts
+  │   │   └── product.module.ts
+  │   ├── auth/
+  │   │   ├── controllers/
+  │   │   │   └── auth.controller.ts
+  │   │   ├── services/
+  │   │   │   └── auth.service.ts
+  │   │   ├── repositories/
+  │   │   │   └── auth.repository.ts
+  │   │   ├── dto/
+  │   │   │   ├── login.dto.ts
+  │   │   │   └── register.dto.ts
+  │   │   ├── strategies/
+  │   │   │   └── jwt.strategy.ts
+  │   │   └── auth.module.ts
+  └── ...
+prisma/
+  ├── schema.prisma
+  └── ...
