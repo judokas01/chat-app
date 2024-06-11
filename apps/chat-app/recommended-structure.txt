@@ -3,6 +3,7 @@ src/
   ├── main.ts
   ├── common/
   │   ├── filters/
+      ├── entities/
   │   ├── guards/
   │   ├── interceptors/
   │   ├── middlewares/
