@@ -11,6 +11,8 @@
     }
   ],
   "compilerOptions": {
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@root/*": ["apps/chat-app/src/*"],}
   }
 }

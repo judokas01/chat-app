@@ -9,3 +9,5 @@ export type Message = {
     createdAt: Date
     isRemoved: boolean
 }
+
+export type MessageInput = Omit<Message, 'id' | 'createdAt' | 'isRemoved'>

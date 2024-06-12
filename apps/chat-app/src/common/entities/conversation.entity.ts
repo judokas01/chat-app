@@ -7,3 +7,5 @@ export type Conversation = {
     createdAt: Date
     lastMessageAt: Date
 }
+
+export type ConversationInput = Omit<Conversation, 'id' | 'createdAt' | 'lastMessageAt'>
