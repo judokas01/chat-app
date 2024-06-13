@@ -20,8 +20,8 @@ describe('AppController', () => {
         const saved = await prisma.user.create({
             data: {
                 email: 'asd',
-                name: 'asd',
                 password: 'asd',
+                userName: 'asd',
             },
         })
 

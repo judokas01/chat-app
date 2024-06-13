@@ -4,3 +4,5 @@ export interface IUserRepository {
     createOne: (user: UserInput) => Promise<User>
     findByUserName: (user: User['userName']) => Promise<User | null>
 }
+
+export const IUserRepository = Symbol('IUserRepository')
