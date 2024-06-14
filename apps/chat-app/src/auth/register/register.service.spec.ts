@@ -4,6 +4,7 @@ import { userMock } from '@root/common/mocks/user'
 import { UserPrismaRepository } from '../repository/prisma/user.repository'
 import { IUserRepository } from '../repository/user-repository.interface'
 import { RegisterService } from './register.service'
+import { UserAlreadyExistsError } from './register.exeptions'
 
 describe('RegisterService', () => {
     let service: RegisterService
@@ -42,6 +43,6 @@ describe('RegisterService', () => {
         const user = userMock.random.getOne()
         await repository.createOne(user)
 
-        await expect(service.register(user)).rejects.toThrow('User already exists')
+        await expect(service.register(user)).rejects.toThrow(UserAlreadyExistsError)
     })
 })

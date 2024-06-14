@@ -1,0 +1,1 @@
+export const AUTH_MODULE_SALT_ROUNDS = 10
