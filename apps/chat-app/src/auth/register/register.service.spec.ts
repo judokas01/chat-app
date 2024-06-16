@@ -4,7 +4,7 @@ import { userMock } from '@root/common/mocks/user'
 import { UserPrismaRepository } from '../repository/prisma/user.repository'
 import { IUserRepository } from '../repository/user-repository.interface'
 import { RegisterService } from './register.service'
-import { UserAlreadyExistsError } from './register.exeptions'
+import { UserAlreadyExistsError } from './exceptions'
 
 describe('RegisterService', () => {
     let service: RegisterService

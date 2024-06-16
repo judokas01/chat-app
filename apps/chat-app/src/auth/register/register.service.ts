@@ -3,7 +3,7 @@ import { User, UserInput } from '@root/common/entities/user.entity'
 import * as bcrypt from 'bcrypt'
 import { IUserRepository } from '../repository/user-repository.interface'
 import { AUTH_MODULE_SALT_ROUNDS } from '../config'
-import { UserAlreadyExistsError } from './register.exeptions'
+import { UserAlreadyExistsError } from './exceptions'
 
 @Injectable()
 export class RegisterService {

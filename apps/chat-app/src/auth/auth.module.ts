@@ -5,6 +5,7 @@ import { LogoutService } from './logout/logout.service'
 import { RegisterService } from './register/register.service'
 import { AuthenticateService } from './authenticate/authenticate.service'
 import { JWT_EXPIRE_IN, JWT_SECRET } from './config'
+import { RenewService } from './renew/renew.service'
 
 @Module({
     imports: [
@@ -14,6 +15,6 @@ import { JWT_EXPIRE_IN, JWT_SECRET } from './config'
             signOptions: { expiresIn: JWT_EXPIRE_IN },
         }),
     ],
-    providers: [LoginService, LogoutService, RegisterService, AuthenticateService],
+    providers: [LoginService, LogoutService, RegisterService, AuthenticateService, RenewService],
 })
 export class AuthModule {}

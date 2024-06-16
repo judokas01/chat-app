@@ -3,7 +3,8 @@ import { UserInput } from '@root/common/entities/user.entity'
 import bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
 import { IUserRepository } from '../repository/user-repository.interface'
-import { InvalidPasswordError, UserNotFoundError } from './login.exeptions'
+import { AUTH_MODULE_SALT_ROUNDS } from '../config'
+import { InvalidPasswordError, UserNotFoundError } from './exceptions'
 
 @Injectable()
 export class LoginService {
@@ -28,11 +29,17 @@ export class LoginService {
             throw new InvalidPasswordError()
         }
 
-        const payload = { sub: found.id, userName: found.userName }
-        const renewToken = ''
+        const jwtPayload = { sub: found.id, userName: found.userName }
+        const renewTokenToHas = crypto.randomUUID()
+
+        const [_, accessToken, renewToken] = await Promise.all([
+            this.prismaRepository.updateRenewToken(found.id, renewTokenToHas),
+            this.jwtService.signAsync(jwtPayload),
+            bcrypt.hash(renewTokenToHas, AUTH_MODULE_SALT_ROUNDS),
+        ])
 
         return {
-            accessToken: await this.jwtService.signAsync(payload),
+            accessToken,
             renewToken,
         }
     }
