@@ -12,6 +12,7 @@ describe('AppController', () => {
     })
 
     afterAll(async () => {
+        await prisma.userRenewToken.deleteMany()
         await prisma.user.deleteMany()
         await prisma.$disconnect()
     })

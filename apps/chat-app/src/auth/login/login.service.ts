@@ -49,6 +49,7 @@ export class LoginService {
         const { authToken, renewToken } = args
 
         const authTokenPayload: JWTPayload = this.jwtService.decode(authToken)
+        console.log({ authTokenPayload })
 
         const user = await this.prismaRepository.findById(authTokenPayload.sub)
 

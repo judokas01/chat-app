@@ -24,8 +24,8 @@ describe('RegisterService', () => {
         const prisma = module.get<PrismaService>(PrismaService)
 
         // todo refactor test utils
-        await prisma.user.deleteMany({})
         await prisma.userRenewToken.deleteMany({})
+        await prisma.user.deleteMany({})
     })
 
     it('should be defined', () => {
