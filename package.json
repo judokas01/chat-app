@@ -13,7 +13,7 @@
     "nest-gen:controller": "nx g @nx/nest:controller",
     "nest-gen:service": "nx g @nx/nest:service",
     "change-dir": "cd ./apps/chat-app/",
-    "v3": "yarn change-dir && yarn nest-generate-v2"
+    "test": "nx run chat-app:test"
   },
   "prisma": {
     "schema": "./apps/chat-app/src/infrastructure/prisma/schema.prisma"

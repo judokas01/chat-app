@@ -14,3 +14,12 @@ export const toCoreUser = (user: PrismaUser): User => ({
     password: user.password,
     userName: user.userName,
 })
+
+export const toUpsertRenewToken = (
+    userId: User['id'],
+    token: string,
+): Prisma.UserRenewTokenUpsertArgs => ({
+    create: { createdAt: new Date(), token: token, userId },
+    update: { createdAt: new Date(), token: token, userId },
+    where: { userId },
+})

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import { User, UserInput } from '@root/common/entities/user.entity'
 import { IUserRepository } from '../user-repository.interface'
-import { toCoreUser, toUserCreate } from './mappers'
+import { toCoreUser, toUpsertRenewToken, toUserCreate } from './mappers'
 
 @Injectable()
 export class UserPrismaRepository implements IUserRepository {
@@ -19,12 +19,14 @@ export class UserPrismaRepository implements IUserRepository {
         return found ? toCoreUser(found) : null
     }
 
+    async findById(id: User['id']): Promise<User | null> {
+        const found = await this.prisma.user.findFirst({ where: { id } })
+
+        return found ? toCoreUser(found) : null
+    }
+
     async updateRenewToken(userId: User['id'], token: string): Promise<void> {
-        await this.prisma.userRenewToken.upsert({
-            create: { createdAt: new Date(), token: token, userId },
-            update: { createdAt: new Date(), token: token, userId },
-            where: { userId },
-        })
+        await this.prisma.userRenewToken.upsert(toUpsertRenewToken(userId, token))
     }
 
     async findRenewTokenByUserId(userId: User['id']): Promise<string | null> {

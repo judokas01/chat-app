@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
-import { userMock } from '@root/common/mocks/user'
+import { userMock } from '@root/common/test-utilities/mocks/user'
 import { UserPrismaRepository } from '../repository/prisma/user.repository'
 import { IUserRepository } from '../repository/user-repository.interface'
 import { RegisterService } from './register.service'
@@ -23,7 +23,9 @@ describe('RegisterService', () => {
         repository = module.get<IUserRepository>(IUserRepository)
         const prisma = module.get<PrismaService>(PrismaService)
 
+        // todo refactor test utils
         await prisma.user.deleteMany({})
+        await prisma.userRenewToken.deleteMany({})
     })
 
     it('should be defined', () => {
