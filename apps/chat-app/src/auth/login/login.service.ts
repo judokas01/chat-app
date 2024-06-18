@@ -5,11 +5,7 @@ import bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
 import { IUserRepository } from '../repository/user-repository.interface'
 import { AUTH_MODULE_SALT_ROUNDS } from '../config'
-import {
-    InvalidPasswordError,
-    InvalidRenewTokenRequestError,
-    UserNotFoundError,
-} from './exceptions'
+import { InvalidPasswordError, InvalidRenewTokenRequestError } from './exceptions'
 
 @Injectable()
 export class LoginService {
@@ -18,14 +14,11 @@ export class LoginService {
         private jwtService: JwtService,
     ) {}
 
-    login = async ({
-        password,
-        userName,
-    }: Pick<UserInput, 'userName' | 'password'>): Promise<LoginServiceResult> => {
+    login = async ({ password, userName }: LoginRequest): Promise<LoginServiceResult> => {
         const user = await this.prismaRepository.findByUserName(userName)
 
         if (!user) {
-            throw new UserNotFoundError()
+            throw new InvalidPasswordError()
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password)
@@ -48,8 +41,10 @@ export class LoginService {
     renewToken = async (args: RenewRequest): Promise<LoginServiceResult> => {
         const { authToken, renewToken } = args
 
-        const authTokenPayload: JWTPayload = this.jwtService.decode(authToken)
-        console.log({ authTokenPayload })
+        const authTokenPayload: JWTPayload | null = this.jwtService.decode(authToken)
+        if (!authTokenPayload) {
+            throw new InvalidRenewTokenRequestError()
+        }
 
         const user = await this.prismaRepository.findById(authTokenPayload.sub)
 
@@ -95,9 +90,11 @@ export type LoginServiceResult = {
     renewToken: string
 }
 
-type RenewRequest = {
+export type RenewRequest = {
     authToken: string
     renewToken: string
 }
+
+export type LoginRequest = Pick<UserInput, 'userName' | 'password'>
 
 type JWTPayload = { sub: string; userName: string }
