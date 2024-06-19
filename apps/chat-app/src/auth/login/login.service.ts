@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
 import { IUserRepository } from '../repository/user-repository.interface'
 import { AUTH_MODULE_SALT_ROUNDS } from '../config'
+import { JWTPayload } from '../common/types'
 import { InvalidPasswordError, InvalidRenewTokenRequestError } from './exceptions'
 
 @Injectable()
@@ -96,5 +97,3 @@ export type RenewRequest = {
 }
 
 export type LoginRequest = Pick<UserInput, 'userName' | 'password'>
-
-type JWTPayload = { sub: string; userName: string }
