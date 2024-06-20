@@ -1,8 +1,8 @@
 import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
+import { JwtService, TokenExpiredError } from '@nestjs/jwt'
 import { JWT_SECRET } from '@root/auth/config'
-import { JWTPayload } from '@root/auth/common/types'
 import { IAuthenticateService } from '../authenticate.interface'
+import { AuthTokenExpiredError } from '../exceptions'
 
 @Injectable()
 export class JwtAuthenticateService implements IAuthenticateService {
@@ -16,10 +16,13 @@ export class JwtAuthenticateService implements IAuthenticateService {
         }
 
         try {
-            const payload = (await this.jwtService.verifyAsync(token, {
+            await this.jwtService.verifyAsync(token, {
                 secret: JWT_SECRET,
-            })) as JWTPayload | null
-        } catch {
+            })
+        } catch (e) {
+            if (e instanceof TokenExpiredError) {
+                throw new AuthTokenExpiredError()
+            }
             throw new UnauthorizedException()
         }
         return true
