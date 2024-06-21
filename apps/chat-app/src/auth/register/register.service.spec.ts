@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import { userMock } from '@root/common/test-utilities/mocks/user'
+import { ConfigService } from '@root/common/config/config-service.service'
 import { UserPrismaRepository } from '../repository/prisma/user.repository'
 import { IUserRepository } from '../repository/user-repository.interface'
 import { RegisterService } from './register.service'
@@ -16,6 +17,7 @@ describe('RegisterService', () => {
                 RegisterService,
                 { provide: IUserRepository, useClass: UserPrismaRepository },
                 PrismaService,
+                ConfigService,
             ],
         }).compile()
 

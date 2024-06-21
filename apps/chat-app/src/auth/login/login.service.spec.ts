@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import { userMock } from '@root/common/test-utilities/mocks/user'
 import { faker } from '@faker-js/faker'
+import { ConfigService } from '@root/common/config/config-service.service'
 import { JWT } from '../common/jwt.module'
 import { IUserRepository } from '../repository/user-repository.interface'
 import { UserPrismaRepository } from '../repository/prisma/user.repository'
@@ -21,6 +22,7 @@ describe('LoginService', () => {
                 { provide: IUserRepository, useClass: UserPrismaRepository },
                 PrismaService,
                 RegisterService,
+                ConfigService,
             ],
         }).compile()
 

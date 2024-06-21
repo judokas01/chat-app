@@ -1,8 +1,18 @@
 import { JwtModule } from '@nestjs/jwt'
-import { JWT_EXPIRE_IN, JWT_SECRET } from '../config'
+import { ConfigService } from '@root/common/config/config-service.service'
 
-export const JWT = JwtModule.register({
+export const JWT = JwtModule.registerAsync({
+    extraProviders: [ConfigService],
     global: true,
-    secret: JWT_SECRET,
-    signOptions: { expiresIn: JWT_EXPIRE_IN },
+    inject: [ConfigService],
+    // eslint-disable-next-line require-await
+    useFactory: async (configService: ConfigService) => {
+        const { expiresIn, secret } = configService.config.auth.jwt
+        return {
+            secretOrPrivateKey: secret,
+            signOptions: {
+                expiresIn: expiresIn,
+            },
+        }
+    },
 })

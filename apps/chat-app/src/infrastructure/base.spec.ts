@@ -1,3 +1,4 @@
+import { env } from 'process'
 import { Prisma, PrismaClient } from '@prisma/client'
 import { DefaultArgs } from '@prisma/client/runtime/library'
 
@@ -6,6 +7,7 @@ describe('AppController', () => {
 
     beforeAll(async () => {
         prisma = new PrismaClient()
+        console.log(env.DATABASE_URL)
         await prisma.$connect()
     })
 
