@@ -6,4 +6,4 @@ export type User = {
     createdAt: Date
 }
 
-export type UserInput = Omit<User, 'id'>
+export type UserInput = Omit<User, 'id' | 'createdAt'>

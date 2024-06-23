@@ -3,8 +3,8 @@ import { Inject, Injectable } from '@nestjs/common'
 import { User, UserInput } from '@root/common/entities/user.entity'
 import bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
+import { ConfigService } from '@root/common/config/config-service.service'
 import { IUserRepository } from '../repository/user-repository.interface'
-import { AUTH_MODULE_SALT_ROUNDS } from '../config'
 import { JWTPayload } from '../common/types'
 import { InvalidPasswordError, InvalidRenewTokenRequestError } from './exceptions'
 
@@ -13,6 +13,7 @@ export class LoginService {
     constructor(
         @Inject(IUserRepository) private prismaRepository: IUserRepository,
         private jwtService: JwtService,
+        private configService: ConfigService,
     ) {}
 
     login = async ({ password, userName }: LoginRequest): Promise<LoginServiceResult> => {
@@ -73,7 +74,7 @@ export class LoginService {
     private createRenewToken = async (userId: string): Promise<string> => {
         const token = randomUUID()
 
-        const hashedToken = await bcrypt.hash(token, AUTH_MODULE_SALT_ROUNDS)
+        const hashedToken = await bcrypt.hash(token, this.configService.config.auth.saltRounds)
 
         await this.prismaRepository.updateRenewToken(userId, hashedToken)
 

@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { getMockContext } from '@root/common/test-utilities/mocks/contex'
 import { UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+import { ConfigService } from '@root/common/config/config-service.service'
 import { JWT } from '../common/jwt.module'
 import { JWTPayload } from '../common/types'
 import { JwtAuthenticateService } from './services/jwt-authenticate.service'
@@ -15,7 +16,10 @@ describe('AuthenticateService', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             imports: [JWT],
-            providers: [{ provide: IAuthenticateService, useClass: JwtAuthenticateService }],
+            providers: [
+                { provide: IAuthenticateService, useClass: JwtAuthenticateService },
+                ConfigService,
+            ],
         }).compile()
 
         service = module.get<IAuthenticateService>(IAuthenticateService)
