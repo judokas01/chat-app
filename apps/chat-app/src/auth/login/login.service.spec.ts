@@ -3,11 +3,13 @@ import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import { userMock } from '@root/common/test-utilities/mocks/user'
 import { faker } from '@faker-js/faker'
 import { ConfigService } from '@root/common/config/config-service.service'
+import { ValidationPipe } from '@nestjs/common'
 import { JWT } from '../common/jwt.module'
 import { IUserRepository } from '../repository/user-repository.interface'
 import { UserPrismaRepository } from '../repository/prisma/user.repository'
 import { RegisterService } from '../register/register.service'
-import { LoginRequest, LoginService, LoginServiceResult, RenewRequest } from './login.service'
+import { LoginService } from './login.service'
+import { LoginServiceResult, RenewRequest, LoginRequest } from './login.dto'
 import { InvalidPasswordError, InvalidRenewTokenRequestError } from './exceptions'
 
 describe('LoginService', () => {
@@ -23,6 +25,7 @@ describe('LoginService', () => {
                 PrismaService,
                 RegisterService,
                 ConfigService,
+                ValidationPipe,
             ],
         }).compile()
 

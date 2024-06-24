@@ -1,12 +1,13 @@
 import { randomUUID } from 'crypto'
-import { Inject, Injectable } from '@nestjs/common'
-import { User, UserInput } from '@root/common/entities/user.entity'
+import { Inject, Injectable, ValidationPipe } from '@nestjs/common'
+import { User } from '@root/common/entities/user.entity'
 import bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@root/common/config/config-service.service'
 import { IUserRepository } from '../repository/user-repository.interface'
 import { JWTPayload } from '../common/types'
 import { InvalidPasswordError, InvalidRenewTokenRequestError } from './exceptions'
+import { LoginRequest, LoginServiceResult, RenewRequest } from './login.dto'
 
 @Injectable()
 export class LoginService {
@@ -14,9 +15,15 @@ export class LoginService {
         @Inject(IUserRepository) private prismaRepository: IUserRepository,
         private jwtService: JwtService,
         private configService: ConfigService,
+        private readonly validationPipe: ValidationPipe,
     ) {}
 
-    login = async ({ password, userName }: LoginRequest): Promise<LoginServiceResult> => {
+    login = async (loginReq: LoginRequest): Promise<LoginServiceResult> => {
+        const { password, userName }: LoginRequest = await this.validationPipe.transform(loginReq, {
+            metatype: LoginRequest,
+            type: 'body',
+        })
+
         const user = await this.prismaRepository.findByUserName(userName)
 
         if (!user) {
@@ -41,7 +48,10 @@ export class LoginService {
     }
 
     renewToken = async (args: RenewRequest): Promise<LoginServiceResult> => {
-        const { authToken, renewToken } = args
+        const { authToken, renewToken }: RenewRequest = await this.validationPipe.transform(args, {
+            metatype: RenewRequest,
+            type: 'body',
+        })
 
         const authTokenPayload: JWTPayload | null = this.jwtService.decode(authToken)
         if (!authTokenPayload) {
@@ -86,15 +96,3 @@ export class LoginService {
         return await this.jwtService.signAsync(jwtPayload)
     }
 }
-
-export type LoginServiceResult = {
-    accessToken: string
-    renewToken: string
-}
-
-export type RenewRequest = {
-    authToken: string
-    renewToken: string
-}
-
-export type LoginRequest = Pick<UserInput, 'userName' | 'password'>
