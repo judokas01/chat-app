@@ -1,0 +1,12 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type LoginResponseGql {
+  accessToken: String!
+  renewToken: String!
+}
+
+type Query {
+  register(password: String!, userName: String!): LoginResponseGql!
+}
