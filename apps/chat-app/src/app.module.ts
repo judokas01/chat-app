@@ -5,10 +5,8 @@ import { GraphQLModule } from '@nestjs/graphql'
 import { AuthModule } from './auth/auth.module'
 import { GQLContext } from './common/gql.context'
 import { JWT } from './auth/common/jwt.module'
-import { RestController } from './auth/controllers/rest/rest.controller'
 
 @Module({
-    controllers: [RestController],
     imports: [
         AuthModule,
         GraphQLModule.forRoot<ApolloDriverConfig>({
