@@ -4,7 +4,8 @@ import { UserPrismaRepository } from '@root/auth/repository/prisma/user.reposito
 import { IUserRepository } from '@root/auth/repository/user-repository.interface'
 import { JWT } from '@root/auth/common/jwt.module'
 import { DynamicModule, Provider, ValidationPipe, Type } from '@nestjs/common'
-import { ConfigService } from '../config/config-service.service'
+import { ConfigService } from '../../config/config-service.service'
+import { cleanDb, getRepositories } from './common'
 
 export const getTestModule = async (args: {
     imports?: DynamicModule[]
@@ -12,9 +13,9 @@ export const getTestModule = async (args: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     controllers?: Type<any>[]
 }) => {
-    const { imports, providers } = args
+    const { imports, providers, controllers } = args
     const module: TestingModule = await Test.createTestingModule({
-        controllers: [...(args.controllers ?? [])],
+        controllers: [...(controllers ?? [])],
         imports: [JWT, ...(imports ?? [])],
         providers: [
             { provide: IUserRepository, useClass: UserPrismaRepository },
@@ -25,18 +26,7 @@ export const getTestModule = async (args: {
         ],
     }).compile()
 
-    const prisma = module.get<PrismaService>(PrismaService)
-
-    const cleanDb = async () => {
-        await prisma.userRenewToken.deleteMany({})
-        await prisma.user.deleteMany({})
-    }
-
-    const repositories = {
-        user: module.get<IUserRepository>(IUserRepository),
-    }
-
-    return { cleanDb, module, repositories }
+    return { cleanDb: cleanDb(module), module, repositories: getRepositories(module) }
 }
 
 export type TestModule = Awaited<ReturnType<typeof getTestModule>>

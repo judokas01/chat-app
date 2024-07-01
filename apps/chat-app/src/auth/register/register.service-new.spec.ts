@@ -1,6 +1,6 @@
 import { userMock } from '@root/common/test-utilities/mocks/user'
 import { BadRequestException } from '@nestjs/common'
-import { TestModule, getTestModule } from '@root/common/test-utilities/container'
+import { TestModule, getTestModule } from '@root/common/test-utilities/test-app/module'
 import { RegisterService } from './register.service'
 import { UserAlreadyExistsError } from './exceptions'
 import { RegisterRequest } from './register.dto'
