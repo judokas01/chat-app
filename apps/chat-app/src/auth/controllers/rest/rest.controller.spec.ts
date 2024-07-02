@@ -1,25 +1,31 @@
 import { RegisterService } from '@root/auth/register/register.service'
 import { LoginService } from '@root/auth/login/login.service'
-import { TestModule, getTestModule } from '@root/common/test-utilities/container'
+import {
+    TestInterfaceModule,
+    getTestModuleWithInterface,
+} from '@root/common/test-utilities/test-app/interface'
+import { AuthModule } from '@root/auth/auth.module'
 import { RestController } from './rest.controller'
 
 describe('Auth Rest Controller tests', () => {
-    let controller: RestController
-    let testModule: TestModule
+    let testModule: TestInterfaceModule
 
     beforeAll(async () => {
-        testModule = await getTestModule({
-            controllers: [RestController],
-            providers: [RegisterService, LoginService],
-        })
-        controller = testModule.module.get<RestController>(RestController)
+        testModule = await getTestModuleWithInterface({ module: AuthModule })
+    })
+
+    afterAll(async () => {
+        await testModule.destroy()
     })
 
     beforeEach(async () => {
         await testModule.cleanDb()
     })
 
-    it('should be defined', () => {
-        expect(controller).toBeDefined()
+    it('should register', async () => {
+        const response = await testModule.request
+            .post('/auth/register')
+            .send({ email: 'mail@aa.aa', password: 'VeryStr@ngPass!123', userName: 'userName' })
+        console.log({ response: response.body })
     })
 })
