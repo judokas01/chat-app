@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Auth Rest Controller tests register + login should return 400 when credentials are incorrect 1`] = `
+{
+  "message": "Invalid username and password combination.",
+  "statusCode": 400,
+}
+`;
+
+exports[`Auth Rest Controller tests register should return invalid request when email is not email 1`] = `
+{
+  "error": "Bad Request",
+  "message": [
+    "email must be an email",
+  ],
+  "statusCode": 400,
+}
+`;
+
+exports[`Auth Rest Controller tests register should return invalid request when multiple properties are wrong 1`] = `
+{
+  "error": "Bad Request",
+  "message": [
+    "email must be an email",
+    "password is not strong enough",
+    "userName should not be empty",
+  ],
+  "statusCode": 400,
+}
+`;
+
+exports[`Auth Rest Controller tests register should return invalid request when password is week 1`] = `
+{
+  "error": "Bad Request",
+  "message": [
+    "password is not strong enough",
+  ],
+  "statusCode": 400,
+}
+`;
+
+exports[`Auth Rest Controller tests register should return invalid request when userName is undefined 1`] = `
+{
+  "error": "Bad Request",
+  "message": [
+    "userName should not be empty",
+  ],
+  "statusCode": 400,
+}
+`;

@@ -1,8 +1,9 @@
 import { Controller, Post, Body } from '@nestjs/common'
 import { LoginRequest, LoginServiceResult, RenewRequest } from '@root/auth/login/login.dto'
 import { LoginService } from '@root/auth/login/login.service'
-import { RegisterRequest } from '@root/auth/register/register.dto'
+import { RegisterRequest, RegisteredUser } from '@root/auth/register/register.dto'
 import { RegisterService } from '@root/auth/register/register.service'
+import { toRegisterResponse } from './mappers'
 
 @Controller('auth')
 export class RestController {
@@ -12,8 +13,9 @@ export class RestController {
     ) {}
 
     @Post('/register')
-    async register(@Body() registerReq: RegisterRequest): Promise<void> {
-        await this.registerService.register(registerReq)
+    async register(@Body() registerReq: RegisterRequest): Promise<RegisteredUser> {
+        const result = await this.registerService.register(registerReq)
+        return toRegisterResponse(result)
     }
 
     @Post('/login')

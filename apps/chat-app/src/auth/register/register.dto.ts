@@ -1,3 +1,4 @@
+import { User } from '@root/common/entities/user.entity'
 import { IsEmail, IsNotEmpty, IsStrongPassword } from 'class-validator'
 
 export class RegisterRequest {
@@ -10,3 +11,5 @@ export class RegisterRequest {
     @IsNotEmpty()
     userName: string
 }
+
+export type RegisteredUser = Omit<User, 'password'>
