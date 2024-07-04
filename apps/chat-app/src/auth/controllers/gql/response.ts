@@ -8,3 +8,15 @@ export class LoginResponseGql {
     @Field()
     renewToken: string
 }
+
+@ObjectType()
+export class RegisterResponseGql {
+    @Field()
+    id: string
+
+    @Field()
+    userName: string
+
+    @Field()
+    email: string
+}

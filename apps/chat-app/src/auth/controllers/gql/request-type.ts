@@ -8,3 +8,15 @@ export class LoginArgsGql {
     @Field()
     userName: string
 }
+
+@ArgsType()
+export class RegisterArgsGql {
+    @Field()
+    password: string
+
+    @Field()
+    userName: string
+
+    @Field()
+    email: string
+}

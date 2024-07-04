@@ -1,36 +1,34 @@
-import { Test, TestingModule } from '@nestjs/testing'
-import { LoginService } from '@root/auth/login/login.service'
-import { RegisterService } from '@root/auth/register/register.service'
-import { JWT } from '@root/auth/common/jwt.module'
-import { JwtAuthenticateService } from '@root/auth/authenticate/services/jwt-authenticate.service'
-import { ConfigService } from '@root/common/config/config-service.service'
-import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
-import { ValidationPipe } from '@nestjs/common'
-import { IUserRepository } from '@root/auth/repository/user-repository.interface'
-import { UserPrismaRepository } from '@root/auth/repository/prisma/user.repository'
-import { IAuthenticateService } from '@root/auth/authenticate/authenticate.interface'
+import {
+    TestInterfaceModule,
+    getTestModuleWithInterface,
+} from '@root/common/test-utilities/test-app/interface'
+import { AuthModule } from '@root/auth/auth.module'
 import { AuthResolver } from './auth.resolver'
 
 describe('AuthResolver', () => {
     let resolver: AuthResolver
+    let testModule: TestInterfaceModule
+
+    beforeAll(async () => {
+        testModule = await getTestModuleWithInterface({
+            module: AuthModule,
+            providers: [AuthResolver],
+        })
+
+        resolver = testModule.module.get<AuthResolver>(AuthResolver)
+
+        type a = Parameters<AuthResolver['logIn']>
+        type b = Awaited<ReturnType<AuthResolver['logIn']>>
+        const a: a = [{ password: '123', userName: 'test' }]
+        const b: b = { accessToken: '', renewToken: '' }
+    })
+
+    afterAll(async () => {
+        await testModule.destroy()
+    })
 
     beforeEach(async () => {
-        const module: TestingModule = await Test.createTestingModule({
-            imports: [JWT],
-            providers: [
-                LoginService,
-                RegisterService,
-                AuthResolver,
-                JwtAuthenticateService,
-                ConfigService,
-                PrismaService,
-                ValidationPipe,
-                { provide: IUserRepository, useClass: UserPrismaRepository },
-                { provide: IAuthenticateService, useClass: JwtAuthenticateService },
-            ],
-        }).compile()
-
-        resolver = module.get<AuthResolver>(AuthResolver)
+        await testModule.cleanDb()
     })
 
     it('should be defined', () => {
