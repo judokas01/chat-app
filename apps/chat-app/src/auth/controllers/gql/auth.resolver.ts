@@ -4,7 +4,7 @@ import { IAuthenticateService } from '@root/auth/authenticate/authenticate.inter
 import { LoginService } from '@root/auth/login/login.service'
 import { RegisterService } from '@root/auth/register/register.service'
 import { LoginArgsGql, RegisterArgsGql } from './request-type'
-import { LoginResponseGql, RegisterResponseGql } from './response'
+import { LoginResponse, RegisterResponse } from './response'
 
 @Resolver()
 export class AuthResolver {
@@ -14,15 +14,15 @@ export class AuthResolver {
         private loginService: LoginService,
     ) {}
 
-    @Query(() => LoginResponseGql, { name: 'register' })
-    async logIn(@Args() { password, userName }: LoginArgsGql): Promise<LoginResponseGql> {
+    @Query(() => LoginResponse, { name: 'login' })
+    async logIn(@Args() { password, userName }: LoginArgsGql): Promise<LoginResponse> {
         return await this.loginService.login({ password, userName })
     }
 
-    @Mutation(() => RegisterResponseGql, { name: 'register' })
+    @Mutation(() => RegisterResponse, { name: 'register' })
     async register(
         @Args() { email, password, userName }: RegisterArgsGql,
-    ): Promise<RegisterResponseGql> {
+    ): Promise<RegisterResponse> {
         return await this.registerService.register({ email, password, userName })
     }
 }

@@ -3,7 +3,9 @@ import {
     getTestModuleWithInterface,
 } from '@root/common/test-utilities/test-app/interface'
 import { AuthModule } from '@root/auth/auth.module'
+import { userMock } from '@root/common/test-utilities/mocks/user'
 import { AuthResolver } from './auth.resolver'
+import { getLogInGqlRequest, commonUtil } from './helpers'
 
 describe('AuthResolver', () => {
     let resolver: AuthResolver
@@ -33,5 +35,41 @@ describe('AuthResolver', () => {
 
     it('should be defined', () => {
         expect(resolver).toBeDefined()
+    })
+
+    it('should get invalid credentials error message', async () => {
+        const res = await testModule.requestGql.post('').send({
+            query: `
+            query ($password:String!,$userName:String!) {
+                login(password: $password, userName: $userName) {
+                    accessToken
+                    accessToken
+                }
+            }`,
+            variables: { password: 'asd', userName: 'asfasf' },
+        })
+
+        expect(res.body).toMatchSnapshot()
+    })
+
+    it('should get invalid credentials error message with test util', async () => {
+        const user = userMock.random.getOne()
+
+        const original = getLogInGqlRequest(user)
+        const kk = commonUtil({
+            args: [{ password: user.password, userName: user.userName }],
+            class: AuthResolver,
+            classMethod: 'logIn',
+            name: 'login',
+            type: 'query',
+        })
+
+        console.log({ kk, original })
+
+        const res = await testModule.requestGql.post('').send(original)
+
+        console.log()
+
+        expect(res.body).toMatchSnapshot()
     })
 })

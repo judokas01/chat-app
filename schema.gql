@@ -7,6 +7,16 @@ type LoginResponseGql {
   renewToken: String!
 }
 
+type Mutation {
+  register(email: String!, password: String!, userName: String!): RegisterResponseGql!
+}
+
 type Query {
-  register(password: String!, userName: String!): LoginResponseGql!
+  login(password: String!, userName: String!): LoginResponseGql!
+}
+
+type RegisterResponseGql {
+  email: String!
+  id: String!
+  userName: String!
 }

@@ -44,6 +44,7 @@ export const getTestModuleWithInterface = async (args: {
         module: app,
         repositories: getRepositories(app),
         request: supertest(apiUrl),
+        requestGql: supertest(gqlUrl),
     }
 }
 

@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AuthResolver should get invalid credentials error message 1`] = `
+{
+  "data": null,
+  "errors": [
+    {
+      "extensions": {
+        "code": "INTERNAL_SERVER_ERROR",
+      },
+      "locations": [
+        {
+          "column": 17,
+          "line": 3,
+        },
+      ],
+      "message": "Invalid username and password combination.",
+      "path": [
+        "login",
+      ],
+    },
+  ],
+}
+`;
+
+exports[`AuthResolver should get invalid credentials error message with test util 1`] = `
+{
+  "data": null,
+  "errors": [
+    {
+      "extensions": {
+        "code": "INTERNAL_SERVER_ERROR",
+      },
+      "locations": [
+        {
+          "column": 17,
+          "line": 3,
+        },
+      ],
+      "message": "Invalid username and password combination.",
+      "path": [
+        "login",
+      ],
+    },
+  ],
+}
+`;
