@@ -57,18 +57,17 @@ describe('AuthResolver', () => {
 
         const original = getLogInGqlRequest(user)
         const kk = commonUtil({
-            args: [{ password: user.password, userName: user.userName }],
+            args: [{ password: '123', userName: 'test' }],
             class: AuthResolver,
             classMethod: 'logIn',
             name: 'login',
+            returnQuery: { accessToken: '', renewToken: '' },
             type: 'query',
         })
 
         console.log({ kk, original })
 
-        const res = await testModule.requestGql.post('').send(original)
-
-        console.log()
+        const res = await testModule.requestGql.post('').send(kk)
 
         expect(res.body).toMatchSnapshot()
     })
