@@ -2,20 +2,20 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type LoginResponseGql {
+type LoginResponse {
   accessToken: String!
   renewToken: String!
 }
 
 type Mutation {
-  register(email: String!, password: String!, userName: String!): RegisterResponseGql!
+  register(email: String!, password: String!, userName: String!): RegisterResponse!
 }
 
 type Query {
-  login(password: String!, userName: String!): LoginResponseGql!
+  login(password: String!, userName: String!): LoginResponse!
 }
 
-type RegisterResponseGql {
+type RegisterResponse {
   email: String!
   id: String!
   userName: String!

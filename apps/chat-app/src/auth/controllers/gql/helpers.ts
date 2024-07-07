@@ -1,4 +1,4 @@
-import { LoginArgsGql } from './request-type'
+import { LoginArgsGql, RegisterArgsGql } from './request-type'
 
 export const getLogInGqlRequest = (
     args: LoginArgsGql,
@@ -15,62 +15,18 @@ export const getLogInGqlRequest = (
     }
 }
 
-export const commonUtil = <
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    T extends new (...args: any[]) => any,
-    M extends keyof InstanceType<T>,
-    A extends Parameters<InstanceType<T>[M]>,
->(args: {
-    type: 'query' | 'mutation'
-    name: string
-    class: T
-    classMethod: M
-    args: A
-}) => {
-    const methodArguments = args.args.at(0)
-    const inferredArgs = inferArguments(methodArguments)
-
-    const returnQuery: Awaited<ReturnType<InstanceType<T>[M]>> = {}
-
-    const queryStart = args.type === 'query' ? 'query' : 'mutation'
-
-    const queryString = `${queryStart}
-    (${inferredArgs.map(({ key, type }) => `$${key}:${type}`).join(', ')})
-    {
-        ${args.name}(${inferredArgs.map(({ key }) => `${key}:$${key}`).join(', ')}) {
-            accessToken
-            renewToken
-        }
-    } 
-    `
-
-    return { variables: methodArguments, [args.type]: queryString }
-}
-
-const inferArguments = (methodArguments: unknown) => {
-    const resolvedArguments = []
-    if (isObject(methodArguments)) {
-        for (const key in methodArguments) {
-            resolvedArguments.push({ key, type: typeToGqlType(typeof methodArguments[key]) })
-        }
-    }
-
-    return resolvedArguments
-}
-
-const isObject = (obj: unknown): obj is Record<string, unknown> => {
-    return typeof obj === 'object' && obj !== null
-}
-
-const typeToGqlType = (type: string) => {
-    switch (type) {
-        case 'string':
-            return 'String!'
-        case 'number':
-            return 'Int!'
-        case 'boolean':
-            return 'Boolean!'
-        default:
-            return 'String!'
+export const getRegisterGqlRequest = (
+    args: RegisterArgsGql,
+): { query: string; variables: RegisterArgsGql } => {
+    return {
+        query: `
+            mutation ($email:String!,$password:String!,$userName:String!) {
+                register(email:$email, password:$password, userName:$userName) {
+                    email
+                    id
+                    userName
+                }
+}`,
+        variables: args,
     }
 }

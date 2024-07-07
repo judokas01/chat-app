@@ -5,10 +5,9 @@ import {
 import { AuthModule } from '@root/auth/auth.module'
 import { userMock } from '@root/common/test-utilities/mocks/user'
 import { AuthResolver } from './auth.resolver'
-import { getLogInGqlRequest, commonUtil } from './helpers'
+import { getLogInGqlRequest, getRegisterGqlRequest } from './helpers'
 
 describe('AuthResolver', () => {
-    let resolver: AuthResolver
     let testModule: TestInterfaceModule
 
     beforeAll(async () => {
@@ -16,13 +15,6 @@ describe('AuthResolver', () => {
             module: AuthModule,
             providers: [AuthResolver],
         })
-
-        resolver = testModule.module.get<AuthResolver>(AuthResolver)
-
-        type a = Parameters<AuthResolver['logIn']>
-        type b = Awaited<ReturnType<AuthResolver['logIn']>>
-        const a: a = [{ password: '123', userName: 'test' }]
-        const b: b = { accessToken: '', renewToken: '' }
     })
 
     afterAll(async () => {
@@ -33,42 +25,20 @@ describe('AuthResolver', () => {
         await testModule.cleanDb()
     })
 
-    it('should be defined', () => {
-        expect(resolver).toBeDefined()
-    })
-
     it('should get invalid credentials error message', async () => {
-        const res = await testModule.requestGql.post('').send({
-            query: `
-            query ($password:String!,$userName:String!) {
-                login(password: $password, userName: $userName) {
-                    accessToken
-                    accessToken
-                }
-            }`,
-            variables: { password: 'asd', userName: 'asfasf' },
-        })
+        const user = userMock.random.getOne()
+
+        const res = await testModule.requestGql.send(getLogInGqlRequest(user))
 
         expect(res.body).toMatchSnapshot()
     })
 
-    it('should get invalid credentials error message with test util', async () => {
+    it('should register via GQL', async () => {
         const user = userMock.random.getOne()
 
-        const original = getLogInGqlRequest(user)
-        const kk = commonUtil({
-            args: [{ password: '123', userName: 'test' }],
-            class: AuthResolver,
-            classMethod: 'logIn',
-            name: 'login',
-            returnQuery: { accessToken: '', renewToken: '' },
-            type: 'query',
-        })
+        const res = await testModule.requestGql.send(getRegisterGqlRequest(user))
 
-        console.log({ kk, original })
-
-        const res = await testModule.requestGql.post('').send(kk)
-
+        console.log(res.body)
         expect(res.body).toMatchSnapshot()
     })
 })

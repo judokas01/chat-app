@@ -23,7 +23,7 @@ exports[`AuthResolver should get invalid credentials error message 1`] = `
 }
 `;
 
-exports[`AuthResolver should get invalid credentials error message with test util 1`] = `
+exports[`AuthResolver should register via GQL 1`] = `
 {
   "data": null,
   "errors": [
@@ -33,8 +33,8 @@ exports[`AuthResolver should get invalid credentials error message with test uti
       },
       "locations": [
         {
-          "column": 9,
-          "line": 4,
+          "column": 17,
+          "line": 3,
         },
       ],
       "message": "Invalid username and password combination.",
