@@ -8,7 +8,7 @@ export const getLogInGqlRequest = (
             query ($password:String!,$userName:String!) {
                 login(password: $password, userName: $userName) {
                     accessToken
-                    accessToken
+                    renewToken
                 }
             }`,
         variables: args,
