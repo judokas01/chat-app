@@ -7,6 +7,7 @@ import { RegisterRequest, RegisteredUser } from '@root/auth/register/register.dt
 import { userMock } from '@root/common/test-utilities/mocks/user'
 import { UserInput } from '@root/common/entities/user.entity'
 import { LoginRequest, LoginServiceResult } from '@root/auth/login/login.dto'
+import { describe, beforeAll, afterAll, beforeEach, it, expect } from 'vitest'
 
 describe('Auth Rest Controller tests', () => {
     let testModule: TestInterfaceModule

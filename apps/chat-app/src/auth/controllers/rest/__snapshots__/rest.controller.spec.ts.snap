@@ -1,13 +1,13 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Auth Rest Controller tests register + login should return 400 when credentials are incorrect 1`] = `
+exports[`Auth Rest Controller tests > register + login > should return 400 when credentials are incorrect 1`] = `
 {
   "message": "Invalid username and password combination.",
   "statusCode": 400,
 }
 `;
 
-exports[`Auth Rest Controller tests register should return invalid request when email is not email 1`] = `
+exports[`Auth Rest Controller tests > register > should return invalid request when 'email is not email' 1`] = `
 {
   "error": "Bad Request",
   "message": [
@@ -17,7 +17,7 @@ exports[`Auth Rest Controller tests register should return invalid request when 
 }
 `;
 
-exports[`Auth Rest Controller tests register should return invalid request when multiple properties are wrong 1`] = `
+exports[`Auth Rest Controller tests > register > should return invalid request when 'multiple properties are wrong' 1`] = `
 {
   "error": "Bad Request",
   "message": [
@@ -29,7 +29,7 @@ exports[`Auth Rest Controller tests register should return invalid request when 
 }
 `;
 
-exports[`Auth Rest Controller tests register should return invalid request when password is week 1`] = `
+exports[`Auth Rest Controller tests > register > should return invalid request when 'password is week' 1`] = `
 {
   "error": "Bad Request",
   "message": [
@@ -39,7 +39,7 @@ exports[`Auth Rest Controller tests register should return invalid request when 
 }
 `;
 
-exports[`Auth Rest Controller tests register should return invalid request when userName is undefined 1`] = `
+exports[`Auth Rest Controller tests > register > should return invalid request when 'userName is undefined' 1`] = `
 {
   "error": "Bad Request",
   "message": [

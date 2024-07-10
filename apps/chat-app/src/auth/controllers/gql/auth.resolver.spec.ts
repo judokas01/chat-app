@@ -5,6 +5,7 @@ import {
 import { AuthModule } from '@root/auth/auth.module'
 import { userMock } from '@root/common/test-utilities/mocks/user'
 import { RegisterService } from '@root/auth/register/register.service'
+import { describe, afterEach, beforeEach, it, expect } from 'vitest'
 import { AuthResolver } from './auth.resolver'
 import { getLogInGqlRequest, getRegisterGqlRequest } from './helpers'
 import { LoginResponse, RegisterResponse } from './response'
