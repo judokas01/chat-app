@@ -2,11 +2,11 @@ import {
     TestInterfaceModule,
     getTestModuleWithInterface,
 } from '@root/common/test-utilities/test-app/interface'
-import { AuthModule } from '@root/auth/auth.module'
-import { RegisterRequest, RegisteredUser } from '@root/auth/register/register.dto'
+import { AuthModule } from '@root/modules/auth/auth.module'
+import { RegisterRequest, RegisteredUser } from '@root/modules/auth/register/register.dto'
 import { userMock } from '@root/common/test-utilities/mocks/user'
 import { UserInput } from '@root/common/entities/user.entity'
-import { LoginRequest, LoginServiceResult } from '@root/auth/login/login.dto'
+import { LoginRequest, LoginServiceResult } from '@root/modules/auth/login/login.dto'
 import { describe, beforeAll, afterAll, beforeEach, it, expect } from 'vitest'
 
 describe('Auth Rest Controller tests', () => {

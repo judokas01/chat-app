@@ -1,8 +1,8 @@
 import { Controller, Post, Body } from '@nestjs/common'
-import { LoginRequest, LoginServiceResult, RenewRequest } from '@root/auth/login/login.dto'
-import { LoginService } from '@root/auth/login/login.service'
-import { RegisterRequest, RegisteredUser } from '@root/auth/register/register.dto'
-import { RegisterService } from '@root/auth/register/register.service'
+import { LoginRequest, LoginServiceResult, RenewRequest } from '@root/modules/auth/login/login.dto'
+import { LoginService } from '@root/modules/auth/login/login.service'
+import { RegisterRequest, RegisteredUser } from '@root/modules/auth/register/register.dto'
+import { RegisterService } from '@root/modules/auth/register/register.service'
 import { toRegisterResponse } from './mappers'
 
 @Controller('auth')

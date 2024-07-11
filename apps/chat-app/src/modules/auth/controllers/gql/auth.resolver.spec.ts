@@ -2,9 +2,9 @@ import {
     TestInterfaceModule,
     getTestModuleWithInterface,
 } from '@root/common/test-utilities/test-app/interface'
-import { AuthModule } from '@root/auth/auth.module'
+import { AuthModule } from '@root/modules/auth/auth.module'
 import { userMock } from '@root/common/test-utilities/mocks/user'
-import { RegisterService } from '@root/auth/register/register.service'
+import { RegisterService } from '@root/modules/auth/register/register.service'
 import { describe, afterEach, beforeEach, it, expect } from 'vitest'
 import { AuthResolver } from './auth.resolver'
 import { getLogInGqlRequest, getRegisterGqlRequest } from './helpers'

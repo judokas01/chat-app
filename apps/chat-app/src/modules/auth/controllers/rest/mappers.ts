@@ -1,5 +1,5 @@
-import { RegisteredUser } from '@root/auth/register/register.dto'
-import { RegisterService } from '@root/auth/register/register.service'
+import { RegisteredUser } from '@root/modules/auth/register/register.dto'
+import { RegisterService } from '@root/modules/auth/register/register.service'
 
 export const toRegisterResponse = ({
     createdAt,

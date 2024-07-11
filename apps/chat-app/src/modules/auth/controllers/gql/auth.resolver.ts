@@ -1,8 +1,8 @@
 import { Inject } from '@nestjs/common'
 import { Resolver, Args, Query, Mutation } from '@nestjs/graphql'
-import { IAuthenticateService } from '@root/auth/authenticate/authenticate.interface'
-import { LoginService } from '@root/auth/login/login.service'
-import { RegisterService } from '@root/auth/register/register.service'
+import { IAuthenticateService } from '@root/modules/auth/authenticate/authenticate.interface'
+import { LoginService } from '@root/modules/auth/login/login.service'
+import { RegisterService } from '@root/modules/auth/register/register.service'
 import { LoginArgsGql, RegisterArgsGql } from './request-type'
 import { LoginResponse, RegisterResponse } from './response'
 

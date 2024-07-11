@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "format": "prettier --write \"apps/**/*.ts*\"",
+    "format": "prettier --write \"apps/**/*.ts\"",
     "compose:up": "docker-compose -f ./dev-docker/docker-compose.yml --profile local-mongo up --remove-orphans",
     "dev": "nx run-many -t serve",
     "code:check": "yarn _lint:check && yarn _prettier:check",
@@ -13,7 +13,7 @@
     "nest-gen:controller": "nx g @nx/nest:controller",
     "nest-gen:service": "nx g @nx/nest:service",
     "change-dir": "cd ./apps/chat-app/",
-    "_prettier:check": "prettier --check \"apps/**/*.ts*\"",
+    "_prettier:check": "prettier --check \"apps/**/*.ts\"",
     "_lint:check": "nx run-many --target=lint",
     "_with-test-env": "yarn env-cmd -f .env.test --silent",
     "test": "yarn _with-test-env vitest --run",
