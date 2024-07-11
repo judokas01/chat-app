@@ -17,7 +17,7 @@
     "_lint:check": "nx run-many --target=lint",
     "_with-test-env": "yarn env-cmd -f .env.test --silent",
     "test": "yarn _with-test-env vitest --run",
-    "test:quick:watch": "yarn _with-test-env vitest --watch "
+    "test:watch": "yarn _with-test-env vitest --watch "
   },
   "prisma": {
     "schema": "./apps/chat-app/src/infrastructure/prisma/schema.prisma"

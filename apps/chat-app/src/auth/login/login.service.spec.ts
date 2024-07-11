@@ -63,7 +63,7 @@ describe('LoginService', () => {
             userName: userToCreate.userName,
         })
 
-        await new Promise((resolve) => setTimeout(resolve, 5000))
+        await new Promise((resolve) => setTimeout(resolve, 2100))
 
         const renewed = await service.renewToken({
             authToken: loggedIn.accessToken,
@@ -80,9 +80,12 @@ describe('LoginService', () => {
     }, 10000)
 
     it.each([
-        { authToken: faker.internet.password() },
-        { renewToken: faker.internet.password() },
-        { authToken: faker.internet.password(), renewToken: faker.internet.password() },
+        { authToken: userMock.random.getStrongPassword() },
+        { renewToken: userMock.random.getStrongPassword() },
+        {
+            authToken: userMock.random.getStrongPassword(),
+            renewToken: userMock.random.getStrongPassword(),
+        },
     ] satisfies Partial<RenewRequest>[])(
         'should throw error auth and renew token combination is invalid',
         async (args) => {
@@ -106,9 +109,9 @@ describe('LoginService', () => {
     )
 
     it.each([
-        { password: faker.internet.password() },
+        { password: userMock.random.getStrongPassword() },
         { userName: faker.internet.userName() },
-        { password: faker.internet.password(), userName: faker.internet.userName() },
+        { password: userMock.random.getStrongPassword(), userName: faker.internet.userName() },
     ] satisfies Partial<LoginRequest>[])(
         'should throw error when user and password is incorrect',
         async (args) => {

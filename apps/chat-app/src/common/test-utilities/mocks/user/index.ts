@@ -11,8 +11,15 @@ const createRandomUserInput = (overrides?: Partial<UserInput>): UserInput => ({
     ...overrides,
 })
 
+const getStrongPassword = () =>
+    faker.internet.password({
+        length: 12,
+        prefix: '@1QH!66',
+    })
+
 export const userMock = {
     random: {
         getOne: createRandomUserInput,
+        getStrongPassword,
     },
 }
