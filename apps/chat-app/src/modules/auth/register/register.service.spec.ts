@@ -1,37 +1,25 @@
-import { Test, TestingModule } from '@nestjs/testing'
-import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import { userMock } from '@root/common/test-utilities/mocks/user'
-import { ConfigService } from '@root/common/config/config-service.service'
-import { BadRequestException, ValidationPipe } from '@nestjs/common'
-import { describe, beforeEach, it, expect } from 'vitest'
-import { UserPrismaRepository } from '../repository/prisma/user.repository'
-import { IUserRepository } from '../repository/user-repository.interface'
+import { BadRequestException } from '@nestjs/common'
+import { describe, beforeEach, it, expect, beforeAll } from 'vitest'
+import { getTestModule, TestModule } from '@root/common/test-utilities/test-app/module'
 import { RegisterService } from './register.service'
 import { UserAlreadyExistsError } from './exceptions'
 import { RegisterRequest } from './register.dto'
 
 describe('RegisterService', () => {
     let service: RegisterService
-    let repository: IUserRepository
+    let testModule: TestModule
+
+    beforeAll(async () => {
+        testModule = await getTestModule({
+            providers: [RegisterService],
+        })
+
+        service = testModule.module.get<RegisterService>(RegisterService)
+    })
 
     beforeEach(async () => {
-        const module: TestingModule = await Test.createTestingModule({
-            providers: [
-                RegisterService,
-                { provide: IUserRepository, useClass: UserPrismaRepository },
-                PrismaService,
-                ConfigService,
-                ValidationPipe,
-            ],
-        }).compile()
-
-        service = module.get<RegisterService>(RegisterService)
-        repository = module.get<IUserRepository>(IUserRepository)
-        const prisma = module.get<PrismaService>(PrismaService)
-
-        // todo refactor test utils
-        await prisma.userRenewToken.deleteMany({})
-        await prisma.user.deleteMany({})
+        await testModule.cleanDb()
     })
 
     it('should be defined', () => {
@@ -41,7 +29,7 @@ describe('RegisterService', () => {
     it('should create user and retrieve it', async () => {
         const created = await service.register(userMock.random.getOne())
 
-        const found = await repository.findByUserName(created.userName)
+        const found = await testModule.repositories.user.findByUserName(created.userName)
 
         expect(found).not.toBeNull()
         expect(found).toMatchObject(created)
@@ -61,7 +49,7 @@ describe('RegisterService', () => {
 
     it('should throw when user already exists', async () => {
         const user = userMock.random.getOne()
-        await repository.createOne(user)
+        await testModule.repositories.user.createOne(user)
 
         await expect(service.register(user)).rejects.toThrow(UserAlreadyExistsError)
     })

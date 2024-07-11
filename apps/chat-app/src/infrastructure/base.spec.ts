@@ -1,14 +1,12 @@
-import { env } from 'process'
 import { Prisma, PrismaClient } from '@prisma/client'
 import { DefaultArgs } from '@prisma/client/runtime/library'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-describe('AppController', () => {
+describe('Prisma implementation test', () => {
     let prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>
 
     beforeAll(async () => {
         prisma = new PrismaClient()
-        console.log(env.DATABASE_URL)
         await prisma.$connect()
     })
 
