@@ -1,13 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing'
-import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import { userMock } from '@root/common/test-utilities/mocks/user'
 import { faker } from '@faker-js/faker'
-import { ConfigService } from '@root/common/config/config-service.service'
-import { ValidationPipe } from '@nestjs/common'
-import { describe, beforeEach, it, expect } from 'vitest'
-import { JWT } from '../common/jwt.module'
-import { IUserRepository } from '../repository/user-repository.interface'
-import { UserPrismaRepository } from '../repository/prisma/user.repository'
+import { describe, beforeEach, it, expect, beforeAll } from 'vitest'
+import { getTestModule, TestModule } from '@root/common/test-utilities/test-app/module'
 import { RegisterService } from '../register/register.service'
 import { LoginService } from './login.service'
 import { LoginServiceResult, RenewRequest, LoginRequest } from './login.dto'
@@ -16,25 +10,16 @@ import { InvalidPasswordError, InvalidRenewTokenRequestError } from './exception
 describe('LoginService', () => {
     let service: LoginService
     let regService: RegisterService
+    let testModule: TestModule
+
+    beforeAll(async () => {
+        testModule = await getTestModule({ providers: [LoginService, RegisterService] })
+        service = testModule.module.get<LoginService>(LoginService)
+        regService = testModule.module.get<RegisterService>(RegisterService)
+    })
 
     beforeEach(async () => {
-        const module: TestingModule = await Test.createTestingModule({
-            imports: [JWT],
-            providers: [
-                LoginService,
-                { provide: IUserRepository, useClass: UserPrismaRepository },
-                PrismaService,
-                RegisterService,
-                ConfigService,
-                ValidationPipe,
-            ],
-        }).compile()
-
-        service = module.get<LoginService>(LoginService)
-        regService = module.get<RegisterService>(RegisterService)
-        const prisma = module.get<PrismaService>(PrismaService)
-        await prisma.userRenewToken.deleteMany({})
-        await prisma.user.deleteMany({})
+        await testModule.cleanDb()
     })
 
     it('should create user, then attempt to log in and receive auth and access tokens', async () => {

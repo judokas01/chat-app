@@ -3,17 +3,14 @@ import { faker } from '@faker-js/faker'
 
 const createRandomUserInput = (overrides?: Partial<UserInput>): UserInput => ({
     email: faker.internet.email(),
-    password: faker.internet.password({
-        length: 12,
-        prefix: '@1QH!66',
-    }),
+    password: getStrongPassword(),
     userName: faker.internet.userName(),
     ...overrides,
 })
 
 const getStrongPassword = () =>
     faker.internet.password({
-        length: 12,
+        length: 34,
         prefix: '@1QH!66',
     })
 
