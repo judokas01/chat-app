@@ -1,10 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing'
 import { getMockContext } from '@root/common/test-utilities/mocks/contex'
 import { UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { ConfigService } from '@root/common/config/config-service.service'
-import { beforeEach, describe, expect, it } from 'vitest'
-import { JWT } from '../common/jwt.module'
+import { beforeAll, describe, expect, it } from 'vitest'
+import { getTestModule } from '@root/common/test-utilities/test-app/module'
 import { JWTPayload } from '../common/types'
 import { JwtAuthenticateService } from './services/jwt-authenticate.service'
 import { IAuthenticateService } from './authenticate.interface'
@@ -14,17 +12,13 @@ describe('AuthenticateService', () => {
     let service: IAuthenticateService
     let jwtService: JwtService
 
-    beforeEach(async () => {
-        const module: TestingModule = await Test.createTestingModule({
-            imports: [JWT],
-            providers: [
-                { provide: IAuthenticateService, useClass: JwtAuthenticateService },
-                ConfigService,
-            ],
-        }).compile()
+    beforeAll(async () => {
+        const testModule = await getTestModule({
+            providers: [{ provide: IAuthenticateService, useClass: JwtAuthenticateService }],
+        })
 
-        service = module.get<IAuthenticateService>(IAuthenticateService)
-        jwtService = module.get<JwtService>(JwtService)
+        service = testModule.module.get<IAuthenticateService>(IAuthenticateService)
+        jwtService = testModule.module.get<JwtService>(JwtService)
     })
 
     it('should be defined', () => {
@@ -48,7 +42,7 @@ describe('AuthenticateService', () => {
         const jwtPayload: JWTPayload = { sub: 'mockId', userName: 'mockUserName' }
         const authToken = await jwtService.signAsync(jwtPayload)
         const context = getMockContext({ authToken })
-        await new Promise((resolve) => setTimeout(resolve, 5000))
+        await new Promise((resolve) => setTimeout(resolve, 2100))
         await expect(service.canActivate(context)).rejects.toThrow(AuthTokenExpiredError)
-    }, 10000)
+    })
 })
