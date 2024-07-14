@@ -2,7 +2,7 @@ import type { User } from './user.entity'
 
 export type Conversation = {
     id: string
-    name: string
+    name: string | null
     participants: User[]
     createdAt: Date
     lastMessageAt: Date
