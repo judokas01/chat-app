@@ -3,14 +3,36 @@ import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import { ConversationInput, Conversation } from '@root/common/entities/conversation.entity'
 import { User } from '@root/common/entities/user.entity'
 import { IConversationRepository } from '../../IConversationRepository'
+import { toConversationCreate, toCoreConversation } from './mappers'
 
 @Injectable()
 export class PrismaConversationRepository implements IConversationRepository {
     constructor(private prisma: PrismaService) {}
 
-    createOne = async (conversation: ConversationInput): Promise<Conversation> => {}
+    createOne = async (conversation: ConversationInput): Promise<Conversation> => {
+        const created = await this.prisma.conversation.create({
+            data: toConversationCreate(conversation),
+            include: { messages: true, usersConversation: true },
+        })
 
-    findById: (id: Conversation['id']) => Promise<Conversation | null>
+        return toCoreConversation(created)
+    }
 
-    findAllByUserId: (userId: User['id']) => Promise<Conversation[]>
+    findById = async (id: Conversation['id']): Promise<Conversation | null> => {
+        const found = await this.prisma.conversation.findUnique({
+            include: { messages: true, usersConversation: true },
+            where: { id },
+        })
+
+        return found ? toCoreConversation(found) : null
+    }
+
+    findAllByUserId = async (userId: User['id']): Promise<Conversation[]> => {
+        const found = await this.prisma.conversation.findMany({
+            include: { messages: true, usersConversation: true },
+            where: { usersConversation: { some: { userId } } },
+        })
+
+        return found.map(toCoreConversation)
+    }
 }

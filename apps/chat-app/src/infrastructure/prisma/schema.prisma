@@ -19,7 +19,7 @@ model User {
   userName          String              @unique
   password          String
   createdAt         DateTime            @default(now())
-  userConversations UsersConverstaion[]
+  userConversations UsersConversation[]
   messages          Message[]
   userRenewToken    UserRenewToken?
 }
@@ -33,7 +33,7 @@ model UserRenewToken {
   isValid   Boolean  @default(true)
 }
 
-model UsersConverstaion {
+model UsersConversation {
   id             String       @id @default(auto()) @map("_id") @db.ObjectId
   customName     String?
   user           User         @relation(fields: [userId], references: [id])
@@ -46,11 +46,11 @@ model UsersConverstaion {
 
 model Conversation {
   id                 String              @id @default(auto()) @map("_id") @db.ObjectId
-  title              String
+  title              String?
   createdAt          DateTime            @default(now())
-  lastMessageAt      DateTime
+  lastMessageAt      DateTime?
   messages           Message[]
-  usersConverstaions UsersConverstaion[]
+  usersConversation UsersConversation[]
 }
 
 model Message {

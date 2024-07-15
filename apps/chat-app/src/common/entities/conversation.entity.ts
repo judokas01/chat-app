@@ -1,3 +1,4 @@
+import type { Message } from './message.entity'
 import type { User } from './user.entity'
 
 export type Conversation = {
@@ -6,6 +7,7 @@ export type Conversation = {
     participants: User[]
     createdAt: Date
     lastMessageAt: Date
+    messages: Message[]
 }
 
 export type ConversationInput = Omit<Conversation, 'id' | 'createdAt' | 'lastMessageAt'>
