@@ -2,7 +2,7 @@ import {
     TestInterfaceModule,
     getTestModuleWithInterface,
 } from '@root/common/test-utilities/test-app/interface'
-import { AuthModule } from '@root/modules/auth/auth.module'
+import { AuthModule } from '@root/modules/auth'
 import { RegisterRequest, RegisteredUser } from '@root/modules/auth/register/register.dto'
 import { userMock } from '@root/common/test-utilities/mocks/user'
 import { UserInput } from '@root/common/entities/user.entity'
@@ -34,7 +34,7 @@ describe('Auth Rest Controller tests', () => {
                 email: expect.any(String),
                 id: expect.any(String),
                 userName: expect.any(String),
-            } satisfies RegisteredUser)
+            } satisfies Omit<RegisteredUser, 'conversations'>)
         })
 
         it('should return registered user', async () => {
@@ -48,7 +48,7 @@ describe('Auth Rest Controller tests', () => {
                 email: expect.any(String),
                 id: expect.any(String),
                 userName: expect.any(String),
-            } satisfies RegisteredUser)
+            } satisfies Omit<RegisteredUser, 'conversations'>)
         })
 
         it.each([

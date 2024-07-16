@@ -1,3 +1,4 @@
+import { HasMany } from './common/Relationship'
 import type { Conversation } from './conversation.entity'
 
 export type User = {
@@ -6,7 +7,7 @@ export type User = {
     email: string
     password: string
     createdAt: Date
-    conversations: Conversation[]
+    conversations: HasMany<Conversation>
 }
 
 export type UserInput = Omit<User, 'id' | 'createdAt'>
