@@ -6,7 +6,7 @@
     "format": "prettier --write \"apps/**/*.ts\"",
     "compose:up": "docker-compose -f ./dev-docker/docker-compose.yml --profile local-mongo up --remove-orphans",
     "dev": "nx run-many -t serve",
-    "code:check": "yarn _lint:check && yarn _prettier:check",
+    "code:check": "yarn _build:check && yarn _lint:check && yarn _prettier:check",
     "nest-generate": "sh -c 'yarn nx g @nx/nest:${0} ${1} --directory apps/chat-app/src/app/${1}'",
     "nest-gen:resource": "nx g @nx/nest:resource",
     "nest-gen:module": "nx g @nx/nest:module",
@@ -15,7 +15,9 @@
     "change-dir": "cd ./apps/chat-app/",
     "_prettier:check": "prettier --check \"apps/**/*.ts\"",
     "_lint:check": "nx run-many --target=lint",
+    "_build:check": "nx run-many --target=build:check",
     "_with-test-env": "yarn env-cmd -f .env.test --silent",
+    "check:build":"tsc --p apps/chat-app/tsconfig.app.json --noEmit",
     "test": "yarn _with-test-env vitest --run",
     "test:watch": "yarn _with-test-env vitest --watch "
   },

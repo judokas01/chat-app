@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
-import { UserPrismaRepository } from '@root/modules/auth/repository/prisma/user.repository'
-import { IUserRepository } from '@root/modules/auth/repository/user-repository.interface'
 import { JWT } from '@root/modules/auth/common/jwt.module'
 import { DynamicModule, Provider, ValidationPipe, Type } from '@nestjs/common'
+import { UserPrismaRepository } from '@root/common/repositories/user/prisma/user.repository'
+import { IUserRepository } from '@root/common/repositories/user.repository'
 import { ConfigService } from '../../config/config-service.service'
 import { cleanDb, getRepositories } from './common'
 

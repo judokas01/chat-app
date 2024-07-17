@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common'
 import { TestingModule } from '@nestjs/testing'
-import { IUserRepository } from '@root/modules/auth/repository/user-repository.interface'
+import { IUserRepository } from '@root/common/repositories/user.repository'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 
 export const cleanDb = (module: TestingModule | INestApplication) => {

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import { ConversationInput, Conversation } from '@root/common/entities/conversation.entity'
 import { User } from '@root/common/entities/user.entity'
-import { IConversationRepository } from '../../IConversationRepository'
+import { IConversationRepository } from '../../../conversation.repository'
 import { toConversationCreate, toCoreConversation } from './mappers'
 
 @Injectable()

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import { User, UserInput } from '@root/common/entities/user.entity'
-import { IUserRepository } from '../user-repository.interface'
+import { IUserRepository } from '../../../../common/repositories/user.repository'
 import { toCoreUser, toUpsertRenewToken, toUserCreate } from './mappers'
 
 @Injectable()

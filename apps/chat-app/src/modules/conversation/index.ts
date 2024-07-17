@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common'
 import { ConfigService } from '@root/common/config/config-service.service'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
-import { PrismaConversationRepository } from './repository/prisma/conversation/conversation.repository'
-import { IConversationRepository } from './repository/IConversationRepository'
+import { IConversationRepository } from '../../common/repositories/conversation.repository'
+import { PrismaConversationRepository } from '../../common/repositories/conversation/prisma/conversation/conversation.repository'
 
 @Module({
     providers: [

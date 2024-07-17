@@ -19,6 +19,26 @@
           "buildTarget": "chat-app:build:production"
         }
       }
+    },
+    "build:check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "tsc --p apps/chat-app/tsconfig.app.json --noEmit",
+          "tsc --p apps/chat-app/tsconfig.spec.json --noEmit"
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/chat-app/**/*.ts"
+        ]
+      }
     }
   }
 }

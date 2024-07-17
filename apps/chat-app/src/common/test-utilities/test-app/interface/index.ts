@@ -1,13 +1,12 @@
 import { Logger, Module, Type } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
-import { UserPrismaRepository } from '@root/modules/auth/repository/prisma/user.repository'
-import { IUserRepository } from '@root/modules/auth/repository/user-repository.interface'
 import supertest from 'supertest'
 import { apolloModule } from '@root/common/graphql/apollo'
+import { UserPrismaRepository } from '@root/common/repositories/user/prisma/user.repository'
+import { IUserRepository } from '@root/common/repositories/user.repository'
 import { ConfigService } from '../../../config/config-service.service'
 import { cleanDb, getRepositories } from '../common'
-import 'reflect-metadata'
 
 export const getTestModuleWithInterface = async (args: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
