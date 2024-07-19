@@ -3,21 +3,21 @@ import { UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { getTestModule } from '@root/common/test-utilities/test-app/module'
-import { JWTPayload } from '../common/types'
-import { JwtAuthenticateService } from './services/jwt-authenticate.service'
-import { IAuthenticateService } from './authenticate.interface'
+import { JWTPayload } from '../../../modules/auth/common/types'
+import { AuthGuard } from './services/jwt-authenticate.service'
+import { IAuthGuard } from './authenticate.guard'
 import { AuthTokenExpiredError } from './exceptions'
 
 describe('AuthenticateService', () => {
-    let service: IAuthenticateService
+    let service: IAuthGuard
     let jwtService: JwtService
 
     beforeAll(async () => {
         const testModule = await getTestModule({
-            providers: [{ provide: IAuthenticateService, useClass: JwtAuthenticateService }],
+            providers: [{ provide: IAuthGuard, useClass: AuthGuard }],
         })
 
-        service = testModule.module.get<IAuthenticateService>(IAuthenticateService)
+        service = testModule.module.get<IAuthGuard>(IAuthGuard)
         jwtService = testModule.module.get<JwtService>(JwtService)
     })
 

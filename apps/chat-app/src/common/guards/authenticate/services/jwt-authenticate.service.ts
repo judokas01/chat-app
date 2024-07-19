@@ -1,11 +1,11 @@
 import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService, TokenExpiredError } from '@nestjs/jwt'
 import { ConfigService } from '@root/common/config/config-service.service'
-import { IAuthenticateService } from '../authenticate.interface'
+import { IAuthGuard } from '../authenticate.guard'
 import { AuthTokenExpiredError } from '../exceptions'
 
 @Injectable()
-export class JwtAuthenticateService implements IAuthenticateService {
+export class AuthGuard implements IAuthGuard {
     constructor(
         private jwtService: JwtService,
         private configService: ConfigService,

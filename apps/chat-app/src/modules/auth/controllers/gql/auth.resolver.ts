@@ -1,6 +1,4 @@
-import { Inject } from '@nestjs/common'
 import { Resolver, Args, Query, Mutation } from '@nestjs/graphql'
-import { IAuthenticateService } from '@root/modules/auth/authenticate/authenticate.interface'
 import { LoginService } from '@root/modules/auth/login/login.service'
 import { RegisterService } from '@root/modules/auth/register/register.service'
 import { LoginArgsGql, RegisterArgsGql } from './request-type'
@@ -9,7 +7,6 @@ import { LoginResponse, RegisterResponse } from './response'
 @Resolver()
 export class AuthResolver {
     constructor(
-        @Inject(IAuthenticateService) private authService: IAuthenticateService,
         private registerService: RegisterService,
         private loginService: LoginService,
     ) {}
