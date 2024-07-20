@@ -2,7 +2,7 @@ import {
     TestInterfaceModule,
     getTestModuleWithInterface,
 } from '@root/common/test-utilities/test-app/interface'
-import { AuthModule } from '@root/modules/auth'
+import { AuthModule } from '@root/modules/auth/auth.module'
 import { RegisterRequest, RegisteredUser } from '@root/modules/auth/register/register.dto'
 import { userMock } from '@root/common/test-utilities/mocks/user'
 import { UserInput } from '@root/common/entities/user.entity'

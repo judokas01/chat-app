@@ -1,34 +1,33 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { Controller, Get, Module, UseGuards } from '@nestjs/common'
 import { GraphQLModule, Query, Resolver } from '@nestjs/graphql'
-import { APP_GUARD } from '@nestjs/core'
-import { AuthGuard } from '../services/jwt-authenticate.service'
+import { AuthGuard } from '../authenticate.guard'
 
 @Controller('api')
-@UseGuards(AuthGuard)
 export class GuardTestingApiRest {
-    @Get('users')
+    @UseGuards(AuthGuard)
+    @Get('guarded')
     getUsers() {
-        return 'users'
+        return 'guarded'
     }
 
-    @Get('books')
+    @Get('free')
     getBooks() {
-        return 'books'
+        return 'free'
     }
 }
 
 @Resolver()
-@UseGuards(AuthGuard)
 export class GuardTestingApiGql {
     @Query(() => String)
-    users(): string {
-        return 'users'
+    @UseGuards(AuthGuard)
+    guarded(): string {
+        return 'guarded'
     }
 
     @Query(() => String)
-    books(): string {
-        return 'books'
+    free(): string {
+        return 'free'
     }
 }
 
@@ -40,12 +39,6 @@ export class GuardTestingApiGql {
             driver: ApolloDriver,
         }),
     ],
-    providers: [
-        GuardTestingApiGql,
-        {
-            provide: APP_GUARD,
-            useClass: AuthGuard,
-        },
-    ],
+    providers: [GuardTestingApiGql],
 })
 export class GuardTestingModule {}

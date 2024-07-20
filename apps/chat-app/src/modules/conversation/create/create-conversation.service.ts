@@ -1,9 +1,8 @@
-import { Inject, Injectable, UseGuards } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { User } from '@root/common/entities/user.entity'
 import { IConversationRepository } from '@root/common/repositories/conversation.repository'
 import { IUserRepository } from '@root/common/repositories/user.repository'
 import { HasMany } from '@root/common/entities/common/Relationship'
-import { AuthGuard } from '@root/common/guards/authenticate/services/jwt-authenticate.service'
 import { UserNotFound } from './exceptions'
 
 @Injectable()
