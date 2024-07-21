@@ -5,6 +5,8 @@ import supertest from 'supertest'
 import { apolloModule } from '@root/common/graphql/apollo'
 import { UserPrismaRepository } from '@root/common/repositories/user/prisma/user.repository'
 import { IUserRepository } from '@root/common/repositories/user.repository'
+import { IConversationRepository } from '@root/common/repositories/conversation.repository'
+import { PrismaConversationRepository } from '@root/common/repositories/conversation/prisma/conversation/conversation.repository'
 import { ConfigService } from '../../../config/config-service.service'
 import { cleanDb, getRepositories } from '../common'
 
@@ -18,6 +20,7 @@ export const getTestModuleWithInterface = async (args: {
         imports: [args.module, apolloModule],
         providers: [
             { provide: IUserRepository, useClass: UserPrismaRepository },
+            { provide: IConversationRepository, useClass: PrismaConversationRepository },
             PrismaService,
             ConfigService,
             ...(args.providers || []),
@@ -37,9 +40,7 @@ export const getTestModuleWithInterface = async (args: {
 
     return {
         cleanDb: cleanDb(app),
-        destroy: async () => {
-            await app.close()
-        },
+        destroy: async () => await app.close(),
         module: app,
         repositories: getRepositories(app),
         request: supertest(apiUrl),
