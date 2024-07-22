@@ -21,10 +21,6 @@ describe('AuthenticateService', () => {
         jwtService = testModule.module.get<JwtService>(JwtService)
     })
 
-    it('should be defined', () => {
-        expect(service).toBeDefined()
-    })
-
     it('should throw when no auth is defined', async () => {
         const context = getMockContext({ authToken: 'invalidToken' })
         await expect(service.canActivate(context)).rejects.toThrow(UnauthorizedException)

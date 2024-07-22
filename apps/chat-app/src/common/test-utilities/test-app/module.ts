@@ -5,7 +5,7 @@ import { DynamicModule, Provider, ValidationPipe, Type } from '@nestjs/common'
 import { UserPrismaRepository } from '@root/common/repositories/user/prisma/user.repository'
 import { IUserRepository } from '@root/common/repositories/user.repository'
 import { IConversationRepository } from '@root/common/repositories/conversation.repository'
-import { PrismaConversationRepository } from '@root/common/repositories/conversation/prisma/conversation/conversation.repository'
+import { PrismaConversationRepository } from '@root/common/repositories/conversation/prisma/conversation.repository'
 import { ConfigService } from '../../config/config-service.service'
 import { cleanDb, getRepositories } from './common'
 

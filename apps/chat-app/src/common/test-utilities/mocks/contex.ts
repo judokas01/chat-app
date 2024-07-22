@@ -7,7 +7,7 @@ export const getMockContext = (overrides: { authToken?: string }): ExecutionCont
         throw new Error('Function not implemented.')
     },
     getArgs: <T extends any[] = any[]>(): T => {
-        return null as any
+        return [] as any
     },
     getClass: <T = any>(): T => {
         throw new Error('Function not implemented.')
