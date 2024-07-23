@@ -5,7 +5,7 @@ import { User } from '@root/common/entities/user.entity'
 import { IConversationRepository } from '@root/common/repositories/conversation.repository'
 import { IMessageRepository } from '@root/common/repositories/message.repository'
 import { IUserRepository } from '@root/common/repositories/user.repository'
-import { GetMessagesRequest, SendMessageRequest } from './message.dto'
+import { GetMessagesRequest, SendMessageRequest } from '../dto/message.dto'
 
 @Injectable()
 export class MessageService {

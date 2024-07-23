@@ -7,7 +7,7 @@ import { ConfigService } from '@root/common/config/config-service.service'
 import { IUserRepository } from '../../../common/repositories/user.repository'
 import { JWTPayload } from '../common/types'
 import { InvalidPasswordError, InvalidRenewTokenRequestError } from './exceptions'
-import { LoginRequest, LoginServiceResult, RenewRequest } from './login.dto'
+import { LoginRequest, LoginServiceResult, RenewRequest } from '../dto/login.dto'
 
 @Injectable()
 export class LoginService {

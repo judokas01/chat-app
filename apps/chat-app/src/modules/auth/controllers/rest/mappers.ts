@@ -1,4 +1,4 @@
-import { RegisteredUser } from '@root/modules/auth/register/register.dto'
+import { RegisteredUser } from '@root/modules/auth/dto/register.dto'
 import { RegisterService } from '@root/modules/auth/register/register.service'
 
 export const toRegisterResponse = ({

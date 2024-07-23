@@ -5,7 +5,7 @@ import { ConfigService } from '@root/common/config/config-service.service'
 import { HasMany } from '@root/common/entities/common/Relationship'
 import { IUserRepository } from '../../../common/repositories/user.repository'
 import { UserAlreadyExistsError } from './exceptions'
-import { RegisterRequest } from './register.dto'
+import { RegisterRequest } from '../dto/register.dto'
 
 @Injectable()
 export class RegisterService {

@@ -4,7 +4,7 @@ import { describe, beforeEach, it, expect, beforeAll } from 'vitest'
 import { getTestModule, TestModule } from '@root/common/test-utilities/test-app/module'
 import { RegisterService } from './register.service'
 import { UserAlreadyExistsError } from './exceptions'
-import { RegisterRequest } from './register.dto'
+import { RegisterRequest } from '../dto/register.dto'
 
 describe('RegisterService', () => {
     let service: RegisterService
