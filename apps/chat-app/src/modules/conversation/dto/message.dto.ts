@@ -25,3 +25,31 @@ class Pagination {
     @IsNotEmpty()
     limit: number
 }
+
+export class MessageResponse {
+    id: string
+
+    text: string
+
+    author: MessageAuthor
+
+    createdAt: Date
+
+    isRemoved: boolean
+}
+
+class MessageAuthor {
+    id: string
+
+    userName: string
+
+    email: string
+}
+
+export class GetMessagesResponse {
+    messages: MessageResponse[]
+
+    cursor: string
+
+    hasMore: boolean
+}

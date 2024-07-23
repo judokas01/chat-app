@@ -2,9 +2,9 @@ import { userMock } from '@root/common/test-utilities/mocks/user'
 import { BadRequestException } from '@nestjs/common'
 import { describe, beforeEach, it, expect, beforeAll } from 'vitest'
 import { getTestModule, TestModule } from '@root/common/test-utilities/test-app/module'
+import { RegisterRequest } from '../dto/register.dto'
 import { RegisterService } from './register.service'
 import { UserAlreadyExistsError } from './exceptions'
-import { RegisterRequest } from '../dto/register.dto'
 
 describe('RegisterService', () => {
     let service: RegisterService

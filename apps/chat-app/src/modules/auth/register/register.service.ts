@@ -4,8 +4,8 @@ import * as bcrypt from 'bcrypt'
 import { ConfigService } from '@root/common/config/config-service.service'
 import { HasMany } from '@root/common/entities/common/Relationship'
 import { IUserRepository } from '../../../common/repositories/user.repository'
-import { UserAlreadyExistsError } from './exceptions'
 import { RegisterRequest } from '../dto/register.dto'
+import { UserAlreadyExistsError } from './exceptions'
 
 @Injectable()
 export class RegisterService {

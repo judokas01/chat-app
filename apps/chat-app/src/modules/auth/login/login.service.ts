@@ -6,8 +6,8 @@ import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@root/common/config/config-service.service'
 import { IUserRepository } from '../../../common/repositories/user.repository'
 import { JWTPayload } from '../common/types'
-import { InvalidPasswordError, InvalidRenewTokenRequestError } from './exceptions'
 import { LoginRequest, LoginServiceResult, RenewRequest } from '../dto/login.dto'
+import { InvalidPasswordError, InvalidRenewTokenRequestError } from './exceptions'
 
 @Injectable()
 export class LoginService {

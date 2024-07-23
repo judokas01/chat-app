@@ -3,8 +3,8 @@ import { faker } from '@faker-js/faker'
 import { describe, beforeEach, it, expect, beforeAll } from 'vitest'
 import { getTestModule, TestModule } from '@root/common/test-utilities/test-app/module'
 import { RegisterService } from '../register/register.service'
-import { LoginService } from './login.service'
 import { LoginServiceResult, RenewRequest, LoginRequest } from '../dto/login.dto'
+import { LoginService } from './login.service'
 import { InvalidPasswordError, InvalidRenewTokenRequestError } from './exceptions'
 
 describe('LoginService', () => {
