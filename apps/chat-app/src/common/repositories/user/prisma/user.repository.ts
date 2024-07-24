@@ -25,6 +25,18 @@ export class UserPrismaRepository implements IUserRepository {
         return found ? toCoreUser(found) : null
     }
 
+    async findManyByIds(ids: User['id'][]): Promise<User[]> {
+        const found = await this.prisma.user.findMany({
+            where: {
+                id: {
+                    in: ids,
+                },
+            },
+        })
+
+        return found.map(toCoreUser)
+    }
+
     async updateRenewToken(userId: User['id'], token: string): Promise<void> {
         await this.prisma.userRenewToken.upsert(toUpsertRenewToken(userId, token))
     }

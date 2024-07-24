@@ -1,17 +1,18 @@
 import { Inject, Injectable, ValidationPipe } from '@nestjs/common'
-import { Conversation } from '@root/common/entities/conversation.entity'
-import { Message, MessageInput } from '@root/common/entities/message.entity'
+import { Message } from '@root/common/entities/message.entity'
 import { User } from '@root/common/entities/user.entity'
 import { IConversationRepository } from '@root/common/repositories/conversation.repository'
 import { IMessageRepository } from '@root/common/repositories/message.repository'
 import { IUserRepository } from '@root/common/repositories/user.repository'
 import { uniq } from 'ramda'
+import { HasOne } from '@root/common/entities/common/Relationship'
 import {
     GetMessagesRequest,
     GetMessagesResponse,
     MessageResponse,
     SendMessageRequest,
 } from '../dto/message.dto'
+import { ConversationNotFoundError, InvalidConversationUserError } from './exceptions'
 
 @Injectable()
 export class MessageService {
@@ -28,6 +29,33 @@ export class MessageService {
                 metatype: SendMessageRequest,
                 type: 'body',
             })
+
+        const conversation = await this.conversationRepository.findById(conversationId)
+        const participantIds = conversation?.participants.getRefsOrFail()
+
+        if (!participantIds?.includes(authorId)) {
+            throw new InvalidConversationUserError()
+        }
+
+        if (!conversation) {
+            throw new ConversationNotFoundError()
+        }
+
+        const newMessage = await this.messageRepository.createOne({
+            author: new HasOne(authorId, 'message.author'),
+            conversation: new HasOne(conversationId, 'message.conversation'),
+            text,
+        })
+
+        const userMap = await this.getAuthorsFromMessages([newMessage])
+
+        return {
+            author: this.getAuthor(authorId, userMap),
+            createdAt: newMessage.createdAt,
+            id: newMessage.id,
+            isRemoved: newMessage.isRemoved,
+            text: newMessage.text,
+        }
     }
 
     getMessages = async (args: GetMessagesRequest): Promise<GetMessagesResponse> => {
