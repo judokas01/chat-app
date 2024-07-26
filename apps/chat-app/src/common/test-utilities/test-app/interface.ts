@@ -7,8 +7,8 @@ import { UserPrismaRepository } from '@root/common/repositories/user/prisma/user
 import { IUserRepository } from '@root/common/repositories/user.repository'
 import { IConversationRepository } from '@root/common/repositories/conversation.repository'
 import { PrismaConversationRepository } from '@root/common/repositories/conversation/prisma/conversation.repository'
-import { ConfigService } from '../../../config/config-service.service'
-import { cleanDb, getRepositories } from '../common'
+import { ConfigService } from '../../config/config-service.service'
+import { cleanDb, getRepositories } from './common'
 
 export const getTestModuleWithInterface = async (args: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

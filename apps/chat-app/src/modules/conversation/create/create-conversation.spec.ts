@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
-import { getTestModule, TestModule } from '@root/common/test-utilities/test-app/module'
+import { getTestModule, TestModule } from '@root/common/test-utilities/test-app/no-interface'
 import { userMock } from '@root/common/test-utilities/mocks/user'
 import { CreateConversationService } from './create-conversation.service'
 

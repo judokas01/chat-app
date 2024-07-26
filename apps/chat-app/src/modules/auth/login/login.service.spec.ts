@@ -1,7 +1,7 @@
 import { userMock } from '@root/common/test-utilities/mocks/user'
 import { faker } from '@faker-js/faker'
 import { describe, beforeEach, it, expect, beforeAll } from 'vitest'
-import { getTestModule, TestModule } from '@root/common/test-utilities/test-app/module'
+import { getTestModule, TestModule } from '@root/common/test-utilities/test-app/no-interface'
 import { RegisterService } from '../register/register.service'
 import { LoginServiceResult, RenewRequest, LoginRequest } from '../dto/login.dto'
 import { LoginService } from './login.service'

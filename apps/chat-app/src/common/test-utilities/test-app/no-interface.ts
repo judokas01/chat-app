@@ -6,6 +6,8 @@ import { UserPrismaRepository } from '@root/common/repositories/user/prisma/user
 import { IUserRepository } from '@root/common/repositories/user.repository'
 import { IConversationRepository } from '@root/common/repositories/conversation.repository'
 import { PrismaConversationRepository } from '@root/common/repositories/conversation/prisma/conversation.repository'
+import { MessagePrismaRepository } from '@root/common/repositories/message/prisma/message.repository'
+import { IMessageRepository } from '@root/common/repositories/message.repository'
 import { ConfigService } from '../../config/config-service.service'
 import { cleanDb, getRepositories } from './common'
 
@@ -22,6 +24,7 @@ export const getTestModule = async (args: {
         providers: [
             { provide: IUserRepository, useClass: UserPrismaRepository },
             { provide: IConversationRepository, useClass: PrismaConversationRepository },
+            { provide: IMessageRepository, useClass: MessagePrismaRepository },
             PrismaService,
             ConfigService,
             ValidationPipe,

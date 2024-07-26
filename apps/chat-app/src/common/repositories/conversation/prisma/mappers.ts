@@ -53,9 +53,20 @@ export const toConversationCreate = (
     conversation: ConversationInput,
 ): Prisma.ConversationCreateInput => {
     const { name } = conversation
+    const participants = conversation.participants.toRefArray()
+
+    const createManyData =
+        'id' in participants ? undefined : participants.map(({ id }) => ({ userId: id }))
 
     return {
         customName: name,
         lastMessageAt: null,
+        usersConversation: createManyData
+            ? {
+                  createMany: {
+                      data: createManyData,
+                  },
+              }
+            : undefined,
     }
 }

@@ -1,6 +1,6 @@
 import { userMock } from '@root/common/test-utilities/mocks/user'
 import { BadRequestException } from '@nestjs/common'
-import { TestModule, getTestModule } from '@root/common/test-utilities/test-app/module'
+import { TestModule, getTestModule } from '@root/common/test-utilities/test-app/no-interface'
 import { describe, beforeAll, beforeEach, it, expect } from 'vitest'
 import { RegisterRequest } from '../dto/register.dto'
 import { RegisterService } from './register.service'

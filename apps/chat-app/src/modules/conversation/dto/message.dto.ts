@@ -1,5 +1,20 @@
 import { IsNotEmpty } from 'class-validator'
 
+class Pagination {
+    cursor: string
+
+    @IsNotEmpty()
+    limit: number
+}
+
+class MessageAuthor {
+    id: string
+
+    userName: string
+
+    email: string
+}
+
 export class SendMessageRequest {
     @IsNotEmpty()
     text: string
@@ -19,13 +34,6 @@ export class GetMessagesRequest {
     pagination: Pagination
 }
 
-class Pagination {
-    cursor: string
-
-    @IsNotEmpty()
-    limit: number
-}
-
 export class MessageResponse {
     id: string
 
@@ -36,14 +44,6 @@ export class MessageResponse {
     createdAt: Date
 
     isRemoved: boolean
-}
-
-class MessageAuthor {
-    id: string
-
-    userName: string
-
-    email: string
 }
 
 export class GetMessagesResponse {
