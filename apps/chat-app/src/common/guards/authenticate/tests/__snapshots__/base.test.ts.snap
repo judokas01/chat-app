@@ -1,5 +1,35 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`YourController > jwt guard tests > when passing expired token > should return result from guarded gql query 1`] = `
+{
+  "data": null,
+  "errors": [
+    {
+      "extensions": {
+        "code": "INTERNAL_SERVER_ERROR",
+      },
+      "locations": [
+        {
+          "column": 3,
+          "line": 1,
+        },
+      ],
+      "message": "Token expired.",
+      "path": [
+        "guarded",
+      ],
+    },
+  ],
+}
+`;
+
+exports[`YourController > jwt guard tests > when passing expired token > should return status 401 from guarded endpoint - aa 1`] = `
+{
+  "message": "Token expired.",
+  "statusCode": 401,
+}
+`;
+
 exports[`YourController > jwt guard tests > when passing invalid token > should return result from guarded gql query 1`] = `
 {
   "data": null,

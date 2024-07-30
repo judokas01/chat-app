@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vitest } from 'vitest'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@root/common/config/config-service.service'
 import { GraphQLModule } from '@nestjs/graphql'
@@ -9,6 +9,7 @@ import supertest from 'supertest'
 import { JWTPayload } from '@root/modules/auth/common/types'
 import { JWT } from '@root/modules/auth/common/jwt.module'
 import { faker } from '@faker-js/faker'
+import { subSeconds } from 'date-fns'
 import { IAuthGuard } from '../authenticate.guard'
 import { AlwaysAuthenticatedAuthenticateService } from '../services/always-authenticated-authenticate.service'
 import { JwtAuthGuard } from '../services/jwt-authenticate.service'
@@ -111,6 +112,32 @@ describe('YourController', () => {
                     .send({ query: '{ free }' })
                     .set({ authorization: token })
                 expect(result.body).toMatchObject({ data: { free: 'free' } })
+            })
+        })
+
+        describe('when passing expired token', () => {
+            let token: string
+            beforeEach(async () => {
+                vitest.useFakeTimers()
+                vitest.setSystemTime(subSeconds(new Date(), 10))
+                const jwtPayload: JWTPayload = { sub: 'someId', userName: 'someUser' }
+                token = `Bearer ` + (await service.signAsync(jwtPayload))
+                vitest.useRealTimers()
+            })
+
+            it('should return status 401 from guarded endpoint - aa', async () => {
+                const result = await supertest(url).get('/guarded').set({ authorization: token })
+                expect(result.status).toBe(401)
+                expect(result.body).toMatchSnapshot()
+            })
+
+            it('should return result from guarded gql query', async () => {
+                const result = await supertest(gqlUrl)
+                    .post('')
+                    .send({ query: '{ guarded }' })
+                    .set({ authorization: token })
+
+                expect(result.body).toMatchSnapshot()
             })
         })
     })
