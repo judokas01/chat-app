@@ -1,7 +1,6 @@
-import { IsNotEmpty, IsString } from 'class-validator'
+import { IsNotEmpty } from 'class-validator'
 
 class Pagination {
-    @IsString()
     cursor: string
 
     @IsNotEmpty()
@@ -9,32 +8,25 @@ class Pagination {
 }
 
 class MessageAuthor {
-    @IsString()
     id: string
 
-    @IsString()
     userName: string
 
-    @IsString()
     email: string
 }
 
 export class SendMessageRequest {
     @IsNotEmpty()
-    @IsString()
     text: string
 
     @IsNotEmpty()
-    @IsString()
     authorId: string
 
     @IsNotEmpty()
-    @IsString()
     conversationId: string
 }
 
 export class GetMessagesRequest {
-    @IsString()
     @IsNotEmpty()
     conversationId: string
 
