@@ -1,15 +1,15 @@
-import { IsOptional, IsString } from 'class-validator'
+import { IsEmail, IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator'
 
 export class FindUserRequest {
-    @IsOptional({ groups: ['findUser'] })
+    @IsOptional()
     @IsString()
-    id: string
+    userName?: string
 
-    @IsOptional({ groups: ['findUser'] })
-    @IsString()
-    userName: string
+    @IsOptional()
+    @IsEmail()
+    email?: string
 
-    @IsOptional({ groups: ['findUser'] })
-    @IsString()
-    email: string
+    @ValidateIf((o) => !o.userName && !o.email)
+    @IsNotEmpty({ message: 'Either userName or email must be provided' })
+    groupValidation?: boolean
 }
