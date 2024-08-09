@@ -1,10 +1,11 @@
 import { CommonTestModule } from '@root/common/test-utilities/test-app/common/types'
 import { Conversation } from '@root/common/entities/conversation.entity'
 import { HasMany } from '@root/common/entities/common/Relationship'
+import { User } from '@root/common/entities/user.entity'
 import { userMock } from '../user'
 
 const createRandomConversation = async (
-    overrides: { userCount?: number; conversation?: Partial<Conversation> },
+    overrides: { userCount?: number; conversation?: Partial<Conversation>; user?: User },
     module: CommonTestModule,
 ) => {
     const users = await Promise.all(
@@ -13,17 +14,20 @@ const createRandomConversation = async (
         ),
     )
 
+    const allUsers = [overrides.user, ...users].filter(Boolean) as User[]
+
     const conversation = await module.repositories.conversation.createOne({
+        lastMessageAt: null,
         messages: new HasMany(undefined, 'conversation.messages'),
         name: null,
         participants: new HasMany(
-            users.map((e) => e.id),
+            allUsers.map((e) => e.id),
             'conversation.participants',
         ),
         ...overrides.conversation,
     })
 
-    return { conversation, users }
+    return { conversation, users: allUsers }
 }
 
 export const conversationMock = {

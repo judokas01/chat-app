@@ -23,6 +23,7 @@ describe('User repository', () => {
         )
 
         const conversation = await testModule.repositories.conversation.createOne({
+            lastMessageAt: null,
             messages: new HasMany<Message>([], 'conversation.messages'),
             name: faker.lorem.word(),
             participants: new HasMany(
@@ -44,6 +45,7 @@ describe('User repository', () => {
         await Promise.all(
             rest.map((user) =>
                 testModule.repositories.conversation.createOne({
+                    lastMessageAt: null,
                     messages: new HasMany<Message>([], 'conversation.messages'),
                     name: faker.lorem.word(),
                     participants: new HasMany([mainUser.id, user.id], 'conversation.participants'),

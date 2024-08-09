@@ -52,7 +52,7 @@ const toCoreMessages = (messages?: PrismaMessage[]): Conversation['messages'] =>
 export const toConversationCreate = (
     conversation: ConversationInput,
 ): Prisma.ConversationCreateInput => {
-    const { name } = conversation
+    const { name, lastMessageAt } = conversation
     const participants = conversation.participants.toRefArray()
 
     const createManyData =
@@ -60,7 +60,7 @@ export const toConversationCreate = (
 
     return {
         customName: name,
-        lastMessageAt: null,
+        lastMessageAt,
         usersConversation: createManyData
             ? {
                   createMany: {

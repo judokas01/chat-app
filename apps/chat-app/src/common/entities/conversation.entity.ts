@@ -11,4 +11,4 @@ export type Conversation = {
     messages: HasMany<Message>
 }
 
-export type ConversationInput = Omit<Conversation, 'id' | 'createdAt' | 'lastMessageAt'>
+export type ConversationInput = Omit<Conversation, 'id' | 'createdAt'>

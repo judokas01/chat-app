@@ -30,6 +30,9 @@ export class PrismaConversationRepository implements IConversationRepository {
     findAllByUserId = async (userId: User['id']): Promise<Conversation[]> => {
         const found = await this.prisma.conversation.findMany({
             include: { messages: true, usersConversation: true },
+            orderBy: {
+                lastMessageAt: 'desc',
+            },
             where: { usersConversation: { some: { userId } } },
         })
 

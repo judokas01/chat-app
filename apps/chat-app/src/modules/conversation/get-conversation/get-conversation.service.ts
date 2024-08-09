@@ -14,6 +14,6 @@ export class GetConversationService {
 
         if (!user) return []
 
-        const found = await this.conversationRepository.findAllByUserId(user.id)
+        return await this.conversationRepository.findAllByUserId(user.id)
     }
 }
