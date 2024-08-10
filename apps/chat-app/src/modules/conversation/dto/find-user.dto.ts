@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator'
+import { IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator'
 
 export class FindUserRequest {
     @IsOptional()
@@ -6,7 +6,7 @@ export class FindUserRequest {
     userName?: string
 
     @IsOptional()
-    @IsEmail()
+    @IsString()
     email?: string
 
     @ValidateIf((o) => !o.userName && !o.email)

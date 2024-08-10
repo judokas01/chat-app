@@ -15,8 +15,7 @@ export class FindUserService {
             type: 'body',
         })
 
-        const user = await this.userRepository.findOne({ email, userName })
-        return user
+        return await this.userRepository.findOne({ email, userName })
     }
 
     findMany = async (args: FindUserRequest) => {

@@ -37,12 +37,18 @@ export class UserPrismaRepository implements IUserRepository {
     }: Partial<Pick<User, 'email' | 'userName'>>): Promise<User[]> {
         const found = await this.prisma.user.findMany({
             where: {
-                email: {
-                    contains: email,
-                },
-                userName: {
-                    contains: userName,
-                },
+                OR: [
+                    {
+                        email: {
+                            contains: email,
+                        },
+                    },
+                    {
+                        userName: {
+                            contains: userName,
+                        },
+                    },
+                ],
             },
         })
 
