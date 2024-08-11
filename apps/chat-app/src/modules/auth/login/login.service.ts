@@ -30,7 +30,7 @@ export class LoginService {
             throw new InvalidPasswordError()
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password)
+        const isPasswordValid = await bcrypt.compare(password, user.data.password)
 
         if (!isPasswordValid) {
             throw new InvalidPasswordError()
@@ -92,7 +92,7 @@ export class LoginService {
     }
 
     private getJwtToken = async (user: User): Promise<string> => {
-        const jwtPayload: JWTPayload = { sub: user.id, userName: user.userName }
+        const jwtPayload: JWTPayload = { sub: user.id, userName: user.data.userName }
         return await this.jwtService.signAsync(jwtPayload)
     }
 }

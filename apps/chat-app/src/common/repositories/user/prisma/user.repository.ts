@@ -13,7 +13,7 @@ export class UserPrismaRepository implements IUserRepository {
         return toCoreUser(created)
     }
 
-    async findByUserName(userName: User['userName']): Promise<User | null> {
+    async findByUserName(userName: User['data']['userName']): Promise<User | null> {
         const found = await this.prisma.user.findFirst({ where: { userName } })
 
         return found ? toCoreUser(found) : null
@@ -25,7 +25,7 @@ export class UserPrismaRepository implements IUserRepository {
         return found ? toCoreUser(found) : null
     }
 
-    async findOne(args: Partial<Pick<User, 'email' | 'userName'>>): Promise<User | null> {
+    async findOne(args: Partial<Pick<User['data'], 'email' | 'userName'>>): Promise<User | null> {
         const found = await this.prisma.user.findFirst({ where: args })
 
         return found ? toCoreUser(found) : null
@@ -34,7 +34,7 @@ export class UserPrismaRepository implements IUserRepository {
     async findManyByPartial({
         email,
         userName,
-    }: Partial<Pick<User, 'email' | 'userName'>>): Promise<User[]> {
+    }: Partial<Pick<User['data'], 'email' | 'userName'>>): Promise<User[]> {
         const found = await this.prisma.user.findMany({
             where: {
                 OR: [

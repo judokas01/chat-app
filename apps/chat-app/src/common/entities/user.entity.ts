@@ -1,7 +1,21 @@
 import { HasMany } from './common/Relationship'
 import type { Conversation } from './conversation.entity'
 
-export type User = {
+export class User {
+    constructor(private user: UserData) {}
+
+    get data() {
+        return this.user
+    }
+
+    get id() {
+        return this.user.id
+    }
+
+    clone = () => new User({ ...this.user })
+}
+
+export type UserData = {
     id: string
     userName: string
     email: string
@@ -10,4 +24,4 @@ export type User = {
     conversations: HasMany<Conversation>
 }
 
-export type UserInput = Omit<User, 'id' | 'createdAt'>
+export type UserInput = Omit<UserData, 'id' | 'createdAt'>

@@ -9,7 +9,7 @@ export const toUserCreate = (input: UserInput): Prisma.UserCreateInput => ({
 })
 
 export const toCoreUser = (user: PrismaUser): User => ({
-    conversations: new HasMany(undefined, 'user.conversations'),
+    conversations: HasMany.unloaded('user.conversations'),
     createdAt: user.createdAt,
     email: user.email,
     id: user.id,

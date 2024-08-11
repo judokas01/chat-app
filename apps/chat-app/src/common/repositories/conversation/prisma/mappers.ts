@@ -7,6 +7,8 @@ import {
 } from '@prisma/client'
 
 import { HasMany } from '@root/common/entities/common/Relationship'
+import { toCoreMessage } from '../../message/prisma/mappers'
+import { toCoreUser } from '../../user/prisma/mappers'
 
 export const toCoreConversation = (
     conversation: PrismaConversation & {
@@ -16,37 +18,31 @@ export const toCoreConversation = (
 ): Conversation => {
     const { id, createdAt, lastMessageAt, messages, usersConversation, customName } = conversation
 
-    return {
+    return new Conversation({
         createdAt,
         id,
         lastMessageAt,
         messages: toCoreMessages(messages),
         name: customName,
         participants: toCoreParticipant(usersConversation),
-    }
+    })
 }
 
 const toCoreParticipant = (
     userConversation?: PrismaUserConversation[],
-): Conversation['participants'] => {
+): Conversation['data']['participants'] => {
     if (!userConversation) {
-        return new HasMany(undefined, 'conversation.participants')
+        return HasMany.loaded([], 'conversation.participants')
     }
 
-    return new HasMany(
-        userConversation.map(({ userId }) => userId),
-        'conversation.participants',
-    )
+    return HasMany.loaded(userConversation.map(toCoreUser), 'conversation.participants')
 }
 
 const toCoreMessages = (messages?: PrismaMessage[]): Conversation['messages'] => {
     if (!messages) {
-        return new HasMany(undefined, 'conversation.messages')
+        return HasMany.unloaded('conversation.messages')
     }
-    return new HasMany(
-        messages.map(({ id }) => id),
-        'conversation.participants',
-    )
+    return HasMany.loaded(messages.map(toCoreMessage), 'conversation.participants')
 }
 
 export const toConversationCreate = (

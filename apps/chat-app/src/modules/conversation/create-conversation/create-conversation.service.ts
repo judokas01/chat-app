@@ -25,12 +25,9 @@ export class CreateConversationService {
 
         const created = await this.conversationRepository.createOne({
             lastMessageAt: null,
-            messages: new HasMany(undefined, 'conversation.messages'),
+            messages: HasMany.unloaded('conversation.messages'),
             name: name ?? null,
-            participants: new HasMany(
-                found.map((e) => e.id),
-                'conversation.participants',
-            ),
+            participants: HasMany.loaded(found, 'conversation.participants'),
         })
 
         return created

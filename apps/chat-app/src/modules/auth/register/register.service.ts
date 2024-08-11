@@ -29,7 +29,7 @@ export class RegisterService {
 
         return await this.prismaRepository.createOne({
             ...validated,
-            conversations: new HasMany([], 'user.conversations'),
+            conversations: HasMany.loaded([], 'user.conversations'),
             password: await this.hashPassword(validated.password),
         })
     }

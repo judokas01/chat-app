@@ -2,7 +2,21 @@ import { HasOne } from './common/Relationship'
 import type { Conversation } from './conversation.entity'
 import type { User } from './user.entity'
 
-export type Message = {
+export class Message {
+    constructor(private message: MessageData) {}
+
+    get data() {
+        return this.message
+    }
+
+    get id() {
+        return this.message.id
+    }
+
+    clone = () => new Message({ ...this.message })
+}
+
+export type MessageData = {
     id: string
     text: string
     author: HasOne<User>
@@ -11,4 +25,4 @@ export type Message = {
     isRemoved: boolean
 }
 
-export type MessageInput = Omit<Message, 'id' | 'createdAt' | 'isRemoved'>
+export type MessageInput = Omit<MessageData, 'id' | 'createdAt' | 'isRemoved'>
