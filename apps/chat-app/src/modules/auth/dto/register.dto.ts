@@ -12,4 +12,4 @@ export class RegisterRequest {
     userName: string
 }
 
-export type RegisteredUser = Omit<User, 'password' | 'conversations'>
+export type RegisteredUser = Omit<User['data'], 'password' | 'conversations'>

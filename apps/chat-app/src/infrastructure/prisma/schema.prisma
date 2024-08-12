@@ -49,7 +49,7 @@ model Conversation {
   createdAt         DateTime            @default(now())
   lastMessageAt     DateTime?
   messages          Message[]
-  usersConversation UsersConversation[]
+  usersConversations UsersConversation[]
 }
 
 model Message {

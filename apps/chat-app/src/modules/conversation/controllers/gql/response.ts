@@ -6,7 +6,7 @@ export class Conversation {
     id: string
 
     @Field({ nullable: true })
-    name?: string
+    name: string | null
 
     @Field()
     createdAt: Date

@@ -8,14 +8,15 @@ export const toUserCreate = (input: UserInput): Prisma.UserCreateInput => ({
     userName: input.userName,
 })
 
-export const toCoreUser = (user: PrismaUser): User => ({
-    conversations: HasMany.unloaded('user.conversations'),
-    createdAt: user.createdAt,
-    email: user.email,
-    id: user.id,
-    password: user.password,
-    userName: user.userName,
-})
+export const toCoreUser = (user: PrismaUser): User =>
+    new User({
+        conversations: HasMany.unloaded('user.conversations'),
+        createdAt: user.createdAt,
+        email: user.email,
+        id: user.id,
+        password: user.password,
+        userName: user.userName,
+    })
 
 export const toUpsertRenewToken = (
     userId: User['id'],

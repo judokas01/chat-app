@@ -18,12 +18,9 @@ const createRandomConversation = async (
 
     const conversation = await module.repositories.conversation.createOne({
         lastMessageAt: null,
-        messages: new HasMany(undefined, 'conversation.messages'),
+        messages: HasMany.unloaded('conversation.messages'),
         name: null,
-        participants: new HasMany(
-            allUsers.map((e) => e.id),
-            'conversation.participants',
-        ),
+        participants: HasMany.loaded(allUsers, 'conversation.participants'),
         ...overrides.conversation,
     })
 

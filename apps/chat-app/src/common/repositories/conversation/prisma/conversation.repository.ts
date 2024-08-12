@@ -12,7 +12,7 @@ export class PrismaConversationRepository implements IConversationRepository {
     createOne = async (conversation: ConversationInput): Promise<Conversation> => {
         const created = await this.prisma.conversation.create({
             data: toConversationCreate(conversation),
-            include: { messages: true, usersConversation: true },
+            include: { messages: true, usersConversations: true },
         })
 
         return toCoreConversation(created)
@@ -20,7 +20,7 @@ export class PrismaConversationRepository implements IConversationRepository {
 
     findById = async (id: Conversation['id']): Promise<Conversation | null> => {
         const found = await this.prisma.conversation.findUnique({
-            include: { messages: true, usersConversation: true },
+            include: { messages: true, usersConversations: true },
             where: { id },
         })
 
@@ -29,11 +29,17 @@ export class PrismaConversationRepository implements IConversationRepository {
 
     findAllByUserId = async (userId: User['id']): Promise<Conversation[]> => {
         const found = await this.prisma.conversation.findMany({
-            include: { usersConversation: true },
+            include: {
+                usersConversations: {
+                    include: {
+                        user: true,
+                    },
+                },
+            },
             orderBy: {
                 lastMessageAt: 'desc',
             },
-            where: { usersConversation: { some: { userId } } },
+            where: { usersConversations: { some: { userId } } },
         })
 
         return found.map(toCoreConversation)

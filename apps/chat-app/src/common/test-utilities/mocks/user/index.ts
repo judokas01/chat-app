@@ -4,7 +4,7 @@ import { HasMany } from '@root/common/entities/common/Relationship'
 import { CommonTestModule } from '@root/common/test-utilities/test-app/common/types'
 
 const createRandomUserInput = (overrides?: Partial<UserInput>): UserInput => ({
-    conversations: new HasMany(undefined, 'user.conversations'),
+    conversations: HasMany.unloaded('user.conversations'),
     email: faker.internet.email(),
     password: getStrongPassword(),
     userName: faker.internet.userName(),

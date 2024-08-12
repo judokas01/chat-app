@@ -1,16 +1,19 @@
-import { Prisma, Message as PrismaMessage } from '@prisma/client'
+import { Prisma, Message as PrismaMessage, User, Conversation } from '@prisma/client'
 import { HasOne } from '@root/common/entities/common/Relationship'
 import { Message, MessageInput } from '@root/common/entities/message.entity'
+import { toCoreUser } from '../../user/prisma/mappers'
+// eslint-disable-next-line import/no-cycle
+import { toCoreConversation } from '../../conversation/prisma/mappers'
 
 export const toMessageCreate = (input: MessageInput): Prisma.MessageCreateInput => ({
     author: {
         connect: {
-            id: input.author.getRefOrFail(),
+            id: input.author.getId(),
         },
     },
     conversation: {
         connect: {
-            id: input.conversation.getRefOrFail(),
+            id: input.conversation.getId(),
         },
     },
     createdAt: new Date(),
@@ -18,11 +21,23 @@ export const toMessageCreate = (input: MessageInput): Prisma.MessageCreateInput 
     text: input.text,
 })
 
-export const toCoreMessage = (message: PrismaMessage): Message => ({
-    author: new HasOne(message.authorId, 'message.author'),
-    conversation: new HasOne(message.conversationId, 'message.conversation'),
-    createdAt: message.createdAt,
-    id: message.id,
-    isRemoved: message.isRemoved,
-    text: message.text,
-})
+export const toCoreMessage = (
+    message: PrismaMessage & {
+        author?: User
+        conversation?: Conversation
+    },
+): Message => {
+    const { author, conversation, createdAt, id, isRemoved, text } = message
+    return new Message({
+        author: author
+            ? HasOne.loaded(toCoreUser(author), 'message.author')
+            : HasOne.unloaded('message.author', message.authorId),
+        conversation: conversation
+            ? HasOne.loaded(toCoreConversation(conversation), 'message.conversation')
+            : HasOne.unloaded('message.conversation', message.conversationId),
+        createdAt,
+        id,
+        isRemoved,
+        text,
+    })
+}
