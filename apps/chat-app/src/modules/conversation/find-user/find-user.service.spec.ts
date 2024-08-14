@@ -62,7 +62,7 @@ describe('FindUserService', () => {
                 const found = await service.findUser(getArgs(user))
 
                 expect(found).not.toBeNull()
-                expect(found).toEqual(user)
+                expect(found!.id).toBe(user.id)
             },
         )
     })

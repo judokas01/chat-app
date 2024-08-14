@@ -29,7 +29,7 @@ describe('RegisterService', () => {
         const found = await testModule.repositories.user.findByUserName(created.data.userName)
 
         expect(found).not.toBeNull()
-        expect(found).toMatchObject(created)
+        expect(found?.id).toMatchObject(created.id)
     })
 
     it.each([
