@@ -50,10 +50,10 @@ describe('User repository', () => {
         })
 
         it.each([
-            { getArgs: () => ({ email: user1.email }), text: 'by email' },
-            { getArgs: () => ({ userName: user1.userName }), text: 'by username' },
+            { getArgs: () => ({ email: user1.data.email }), text: 'by email' },
+            { getArgs: () => ({ userName: user1.data.userName }), text: 'by username' },
             {
-                getArgs: () => ({ email: user1.email, userName: user1.userName }),
+                getArgs: () => ({ email: user1.data.email, userName: user1.data.userName }),
                 text: 'by email and username combinaion',
             },
         ])('should one by email', async ({ getArgs }) => {
@@ -62,12 +62,15 @@ describe('User repository', () => {
         })
 
         it.each([
-            { getArgs: () => ({ email: user1.email.substring(3, 9) }), text: 'by email' },
-            { getArgs: () => ({ userName: user1.userName.substring(3, 9) }), text: 'by username' },
+            { getArgs: () => ({ email: user1.data.email.substring(3, 9) }), text: 'by email' },
+            {
+                getArgs: () => ({ userName: user1.data.userName.substring(3, 9) }),
+                text: 'by username',
+            },
             {
                 getArgs: () => ({
-                    email: user1.email.substring(3, 9),
-                    userName: user1.userName.substring(3, 9),
+                    email: user1.data.email.substring(3, 9),
+                    userName: user1.data.userName.substring(3, 9),
                 }),
                 text: 'by email and username combinaion',
             },
@@ -89,12 +92,12 @@ describe('User repository', () => {
 
 const validateUserStructure = (user: User | null) => {
     expect(user).not.toBeNull()
-    expect(user).toMatchObject({
+    expect(user!.data).toMatchObject({
         conversations: expect.any(Object),
         createdAt: expect.any(Date),
         email: expect.any(String),
         id: expect.any(String),
         password: expect.any(String),
         userName: expect.any(String),
-    } satisfies User)
+    } satisfies User['data'])
 }

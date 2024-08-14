@@ -22,8 +22,8 @@ describe('User repository', () => {
         await Promise.all(
             Array.from({ length: 10 }).map((_) =>
                 testModule.repositories.message.createOne({
-                    author: new HasOne(selectRandom(users).id, 'message.author'),
-                    conversation: new HasOne(conversation.id, 'message.author'),
+                    author: HasOne.loaded(selectRandom(users), 'message.author'),
+                    conversation: HasOne.loaded(conversation, 'message.author'),
                     text: faker.lorem.sentence(),
                 }),
             ),
@@ -41,14 +41,14 @@ describe('User repository', () => {
 
 const validateUserStructure = (message: Message | null) => {
     expect(message).not.toBeNull()
-    expect(message).toMatchObject({
+    expect(message?.data).toMatchObject({
         author: expect.any(Object),
         conversation: expect.any(Object),
         createdAt: expect.any(Date),
         id: expect.any(String),
         isRemoved: false,
         text: expect.any(String),
-    } satisfies Message)
+    } satisfies Message['data'])
 }
 
 const selectRandom = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)]

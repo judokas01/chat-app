@@ -26,7 +26,7 @@ describe('RegisterService', () => {
     it('should create user and retrieve it', async () => {
         const created = await service.register(userMock.random.getOne())
 
-        const found = await testModule.repositories.user.findByUserName(created.userName)
+        const found = await testModule.repositories.user.findByUserName(created.data.userName)
 
         expect(found).not.toBeNull()
         expect(found).toMatchObject(created)

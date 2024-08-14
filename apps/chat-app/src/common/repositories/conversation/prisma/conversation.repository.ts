@@ -12,7 +12,14 @@ export class PrismaConversationRepository implements IConversationRepository {
     createOne = async (conversation: ConversationInput): Promise<Conversation> => {
         const created = await this.prisma.conversation.create({
             data: toConversationCreate(conversation),
-            include: { messages: true, usersConversations: true },
+            include: {
+                messages: true,
+                usersConversations: {
+                    include: {
+                        user: true,
+                    },
+                },
+            },
         })
 
         return toCoreConversation(created)

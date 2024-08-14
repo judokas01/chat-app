@@ -20,6 +20,7 @@ export class AuthResolver {
     async register(
         @Args() { email, password, userName }: RegisterArgsGql,
     ): Promise<RegisterResponse> {
-        return await this.registerService.register({ email, password, userName })
+        const { data } = await this.registerService.register({ email, password, userName })
+        return { email: data.email, id: data.id, userName: data.userName }
     }
 }

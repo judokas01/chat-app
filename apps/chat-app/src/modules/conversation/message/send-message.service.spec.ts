@@ -53,14 +53,14 @@ describe('SendMessageService', () => {
 
         expect(found.items).toHaveLength(2)
         found.items.forEach((message) => {
-            expect(message).toMatchObject({
+            expect(message.data).toMatchObject({
                 author: expect.any(HasOne),
                 conversation: expect.any(HasOne),
                 createdAt: expect.any(Date),
                 id: expect.any(String),
                 isRemoved: false,
                 text: expect.any(String),
-            } satisfies Message)
+            } satisfies Message['data'])
         })
     })
 

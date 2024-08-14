@@ -2,7 +2,6 @@ import { describe, beforeEach, beforeAll, it, expect } from 'vitest'
 import { getTestModule, TestModule } from '@root/common/test-utilities/test-app/no-interface'
 import { faker } from '@faker-js/faker'
 import { HasMany } from '@root/common/entities/common/Relationship'
-import { Message } from '@root/common/entities/message.entity'
 import { userMock } from '@root/common/test-utilities/mocks/user'
 import { Conversation } from '@root/common/entities/conversation.entity'
 
@@ -24,12 +23,9 @@ describe('User repository', () => {
 
         const conversation = await testModule.repositories.conversation.createOne({
             lastMessageAt: null,
-            messages: new HasMany<Message>([], 'conversation.messages'),
+            messages: HasMany.loaded([], 'conversation.messages'),
             name: faker.lorem.word(),
-            participants: new HasMany(
-                users.map((e) => e.id),
-                'conversation.participants',
-            ),
+            participants: HasMany.loaded(users, 'conversation.participants'),
         })
 
         const found = await testModule.repositories.conversation.findById(conversation.id)
@@ -46,9 +42,9 @@ describe('User repository', () => {
             rest.map((user) =>
                 testModule.repositories.conversation.createOne({
                     lastMessageAt: null,
-                    messages: new HasMany<Message>([], 'conversation.messages'),
+                    messages: HasMany.loaded([], 'conversation.messages'),
                     name: faker.lorem.word(),
-                    participants: new HasMany([mainUser.id, user.id], 'conversation.participants'),
+                    participants: HasMany.loaded([mainUser, user], 'conversation.participants'),
                 }),
             ),
         )
@@ -62,12 +58,12 @@ describe('User repository', () => {
 
 const validateUserStructure = (conversation: Conversation | null) => {
     expect(conversation).not.toBeNull()
-    expect(conversation).toMatchObject({
+    expect(conversation?.data).toMatchObject({
         createdAt: expect.any(Date),
         id: expect.any(String),
         lastMessageAt: null,
         messages: expect.any(HasMany),
         name: expect.any(String),
         participants: expect.any(HasMany),
-    } satisfies Conversation)
+    } satisfies Conversation['data'])
 }

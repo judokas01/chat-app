@@ -43,9 +43,9 @@ describe('GetConversationService', () => {
         expect(found).toHaveLength(conversations.length)
 
         const sorted = found.sort((a, b) => {
-            if (!a.lastMessageAt) return 1
-            if (!b.lastMessageAt) return -1
-            return b.lastMessageAt.getTime() - a.lastMessageAt.getTime()
+            if (!a.data.lastMessageAt) return 1
+            if (!b.data.lastMessageAt) return -1
+            return b.data.lastMessageAt.getTime() - a.data.lastMessageAt.getTime()
         })
 
         expect(found).toEqual(sorted)

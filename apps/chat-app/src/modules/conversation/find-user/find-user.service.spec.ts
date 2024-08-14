@@ -50,10 +50,10 @@ describe('FindUserService', () => {
         })
 
         it.each([
-            { getArgs: ({ userName }: User) => ({ userName }), text: 'username' },
-            { getArgs: ({ email }: User) => ({ email }), text: 'email' },
+            { getArgs: ({ data: { userName } }: User) => ({ userName }), text: 'username' },
+            { getArgs: ({ data: { email } }: User) => ({ email }), text: 'email' },
             {
-                getArgs: ({ userName, email }: User) => ({ email, userName }),
+                getArgs: ({ data: { userName, email } }: User) => ({ email, userName }),
                 text: 'username and email',
             },
         ] satisfies { getArgs: (user: User) => FindUserRequest; text: string }[])(

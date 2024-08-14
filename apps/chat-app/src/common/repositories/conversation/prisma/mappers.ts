@@ -1,9 +1,9 @@
 import { Conversation, ConversationInput } from '@root/common/entities/conversation.entity'
 import {
     Prisma,
-    UsersConversation as PrismaUserConversation,
     Message as PrismaMessage,
     Conversation as PrismaConversation,
+    User as PrismaUser,
 } from '@prisma/client'
 
 import { HasMany } from '@root/common/entities/common/Relationship'
@@ -14,7 +14,7 @@ import { toCoreUser } from '../../user/prisma/mappers'
 export const toCoreConversation = (
     conversation: PrismaConversation & {
         messages?: PrismaMessage[]
-        usersConversation?: PrismaUserConversation[]
+        usersConversation?: ConversationPossibleWithUsers[]
     },
 ): Conversation => {
     const { id, createdAt, lastMessageAt, messages, usersConversation, customName } = conversation
@@ -32,34 +32,52 @@ export const toCoreConversation = (
 }
 
 const toCoreParticipant = (
-    userConversation?: PrismaUserConversation[],
+    userConversation?: ConversationPossibleWithUsers[],
 ): Conversation['data']['participants'] => {
     if (!userConversation) {
         return HasMany.loaded([], 'conversation.participants')
     }
 
-    return HasMany.loaded(userConversation.map(toCoreUser), 'conversation.participants')
+    if (userConversation.every(hasUser)) {
+        return HasMany.loaded(
+            userConversation.map(({ user }) => toCoreUser(user)),
+            'conversation.participants',
+        )
+    }
+
+    return HasMany.unloaded('conversation.participants')
 }
 
 export const toConversationCreate = (
     conversation: ConversationInput,
 ): Prisma.ConversationCreateInput => {
     const { name, lastMessageAt } = conversation
-    const participants = conversation.participants.isLoaded()
-        ? conversation.participants.get().map(({ id }) => ({ id }))
-        : undefined
-
-    const createManyData = participants ? participants.map(({ id }) => ({ userId: id })) : undefined
 
     return {
         customName: name,
         lastMessageAt,
-        usersConversation: createManyData
+        usersConversations: conversation.participants.isLoaded()
             ? {
                   createMany: {
-                      data: createManyData,
+                      data: conversation.participants.get().map(({ id }) => ({ userId: id })),
                   },
               }
             : undefined,
     }
+}
+
+type ConversationPossibleWithUsers = ConversationWithoutUser | ConversationWithUser
+
+type ConversationWithoutUser = PrismaConversation & {
+    user?: PrismaUser
+}
+
+type ConversationWithUser = PrismaConversation & {
+    user: PrismaUser
+}
+
+const hasUser = (
+    conversation: ConversationPossibleWithUsers,
+): conversation is ConversationWithUser => {
+    return !!conversation.user
 }
