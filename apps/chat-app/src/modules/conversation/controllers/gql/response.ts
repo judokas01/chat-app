@@ -2,16 +2,16 @@ import { Field, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()
 export class Conversation {
-    @Field()
+    @Field(() => String)
     id: string
 
-    @Field({ nullable: true })
+    @Field(() => String, { nullable: true })
     name: string | null
 
-    @Field()
+    @Field(() => Date)
     createdAt: Date
 
-    @Field({ nullable: true })
+    @Field(() => Date, { nullable: true })
     lastMessageAt: Date | null
 
     @Field(() => [ConversationUser], { nullable: true })
@@ -20,12 +20,12 @@ export class Conversation {
 
 @ObjectType()
 export class ConversationUser {
-    @Field()
+    @Field(() => String)
     id: string
 
-    @Field()
+    @Field(() => String)
     userName: string
 
-    @Field()
+    @Field(() => String)
     email: string
 }

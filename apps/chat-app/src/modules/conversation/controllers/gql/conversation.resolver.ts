@@ -4,6 +4,7 @@ import { MessageService } from '../../message/send-message.service'
 import { GetConversationService } from '../../get-conversation/get-conversation.service'
 import { Conversation as GqlConversation } from './response'
 import { toGqlConversation } from './mappers'
+import { GetConversationArgsGql } from './request-type'
 
 @Resolver()
 export class ConversationResolver {
@@ -13,8 +14,10 @@ export class ConversationResolver {
         private getConversationService: GetConversationService,
     ) {}
 
-    @Query(() => [GqlConversation])
-    async getUserConversations(@Args() { userId }: { userId: string }): Promise<GqlConversation[]> {
+    @Query(() => [GqlConversation], { name: 'getUserConversations' })
+    async getUserConversations(
+        @Args() { userId }: GetConversationArgsGql,
+    ): Promise<GqlConversation[]> {
         const found = await this.getConversationService.getAllByUserId(userId)
         return found.map(toGqlConversation)
     }

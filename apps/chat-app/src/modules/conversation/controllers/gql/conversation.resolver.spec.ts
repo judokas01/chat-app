@@ -1,16 +1,23 @@
-import { Test, TestingModule } from '@nestjs/testing'
 import { describe, beforeEach, it, expect } from 'vitest'
+import {
+    getTestModuleWithInterface,
+    TestInterfaceModule,
+} from '@root/common/test-utilities/test-app/interface'
+import { ConversationModule } from '../../conversation.module'
 import { ConversationResolver } from './conversation.resolver'
 
-describe('ConversatinResolver', () => {
+describe('ConversationResolver', () => {
+    let testModule: TestInterfaceModule
     let resolver: ConversationResolver
 
     beforeEach(async () => {
-        const module: TestingModule = await Test.createTestingModule({
+        testModule = await getTestModuleWithInterface({
+            module: ConversationModule,
             providers: [ConversationResolver],
-        }).compile()
+        })
 
-        resolver = module.get<ConversationResolver>(ConversationResolver)
+        resolver = testModule.module.get<ConversationResolver>(ConversationResolver)
+        await testModule.cleanDb()
     })
 
     it('should be defined', () => {

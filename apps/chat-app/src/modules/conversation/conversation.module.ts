@@ -1,6 +1,10 @@
-import { Module } from '@nestjs/common'
+import { Module, ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@root/common/config/config-service.service'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
+import { IUserRepository } from '@root/common/repositories/user.repository'
+import { UserPrismaRepository } from '@root/common/repositories/user/prisma/user.repository'
+import { IMessageRepository } from '@root/common/repositories/message.repository'
+import { MessagePrismaRepository } from '@root/common/repositories/message/prisma/message.repository'
 import { IConversationRepository } from '../../common/repositories/conversation.repository'
 import { PrismaConversationRepository } from '../../common/repositories/conversation/prisma/conversation.repository'
 import { CreateConversationService } from './create-conversation/create-conversation.service'
@@ -12,8 +16,10 @@ import { FindUserService } from './find-user/find-user.service'
 
 @Module({
     controllers: [ConversationController],
-    providers: [
+    exports: [
         { provide: IConversationRepository, useClass: PrismaConversationRepository },
+        { provide: IUserRepository, useClass: UserPrismaRepository },
+        { provide: IMessageRepository, useClass: MessagePrismaRepository },
         ConfigService,
         PrismaService,
         CreateConversationService,
@@ -21,6 +27,20 @@ import { FindUserService } from './find-user/find-user.service'
         ConversationResolver,
         GetConversationService,
         FindUserService,
+        ValidationPipe,
+    ],
+    providers: [
+        { provide: IConversationRepository, useClass: PrismaConversationRepository },
+        { provide: IUserRepository, useClass: UserPrismaRepository },
+        { provide: IMessageRepository, useClass: MessagePrismaRepository },
+        ConfigService,
+        PrismaService,
+        CreateConversationService,
+        MessageService,
+        ConversationResolver,
+        GetConversationService,
+        FindUserService,
+        ValidationPipe,
     ],
 })
 export class ConversationModule {}

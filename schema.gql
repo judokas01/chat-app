@@ -2,21 +2,25 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type LoginResponse {
-  accessToken: String!
-  renewToken: String!
+type Conversation {
+  createdAt: DateTime!
+  id: String!
+  lastMessageAt: DateTime
+  name: String
+  users: [ConversationUser!]
 }
 
-type Mutation {
-  register(email: String!, password: String!, userName: String!): RegisterResponse!
-}
-
-type Query {
-  login(password: String!, userName: String!): LoginResponse!
-}
-
-type RegisterResponse {
+type ConversationUser {
   email: String!
   id: String!
   userName: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  getUserConversations(userId: String!): [Conversation!]!
 }
