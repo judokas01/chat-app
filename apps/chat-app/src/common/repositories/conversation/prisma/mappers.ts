@@ -3,6 +3,7 @@ import {
     Prisma,
     Message as PrismaMessage,
     Conversation as PrismaConversation,
+    UsersConversation as PrismaUsersConversation,
     User as PrismaUser,
 } from '@prisma/client'
 
@@ -14,10 +15,10 @@ import { toCoreUser } from '../../user/prisma/mappers'
 export const toCoreConversation = (
     conversation: PrismaConversation & {
         messages?: PrismaMessage[]
-        usersConversation?: ConversationPossibleWithUsers[]
+        usersConversations?: ConversationPossibleWithUsers[]
     },
 ): Conversation => {
-    const { id, createdAt, lastMessageAt, messages, usersConversation, customName } = conversation
+    const { id, createdAt, lastMessageAt, messages, usersConversations, customName } = conversation
 
     return new Conversation({
         createdAt,
@@ -27,7 +28,7 @@ export const toCoreConversation = (
             ? HasMany.loaded(messages.map(toCoreMessage), 'conversation.messages')
             : HasMany.unloaded('conversation.messages'),
         name: customName,
-        participants: toCoreParticipant(usersConversation),
+        participants: toCoreParticipant(usersConversations),
     })
 }
 
@@ -68,11 +69,11 @@ export const toConversationCreate = (
 
 type ConversationPossibleWithUsers = ConversationWithoutUser | ConversationWithUser
 
-type ConversationWithoutUser = PrismaConversation & {
+type ConversationWithoutUser = PrismaUsersConversation & {
     user?: PrismaUser
 }
 
-type ConversationWithUser = PrismaConversation & {
+type ConversationWithUser = PrismaUsersConversation & {
     user: PrismaUser
 }
 

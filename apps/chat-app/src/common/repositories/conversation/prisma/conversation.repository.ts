@@ -27,7 +27,14 @@ export class PrismaConversationRepository implements IConversationRepository {
 
     findById = async (id: Conversation['id']): Promise<Conversation | null> => {
         const found = await this.prisma.conversation.findUnique({
-            include: { messages: true, usersConversations: true },
+            include: {
+                messages: true,
+                usersConversations: {
+                    include: {
+                        user: true,
+                    },
+                },
+            },
             where: { id },
         })
 
