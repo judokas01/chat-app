@@ -1,4 +1,4 @@
-import { describe, beforeEach, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import {
     getTestModuleWithInterface,
     TestInterfaceModule,
@@ -18,6 +18,10 @@ describe('ConversationResolver', () => {
 
         resolver = testModule.module.get<ConversationResolver>(ConversationResolver)
         await testModule.cleanDb()
+    })
+
+    afterEach(async () => {
+        await testModule.destroy()
     })
 
     it('should be defined', () => {
