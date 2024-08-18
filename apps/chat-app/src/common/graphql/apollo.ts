@@ -8,6 +8,5 @@ export const apolloModule = GraphQLModule.forRoot<ApolloDriverConfig>({
     driver: ApolloDriver,
     installSubscriptionHandlers: true,
     playground: true,
-
     sortSchema: true,
 })
