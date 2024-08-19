@@ -23,3 +23,30 @@ export class CreateConversationArgsGql {
     @Field({ nullable: true })
     name: string
 }
+
+@ArgsType()
+export class GetConversationMessagesArgsGql {
+    @Field()
+    conversationId: string
+
+    @Field(() => Pagination)
+    pagination: Pagination
+}
+
+@ArgsType()
+export class Pagination {
+    @Field()
+    cursor: string
+
+    @Field()
+    limit: number
+}
+
+@ArgsType()
+export class SendMessageArgsGql {
+    @Field()
+    text: string
+
+    @Field()
+    conversationId: string
+}

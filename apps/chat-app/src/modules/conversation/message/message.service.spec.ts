@@ -5,7 +5,7 @@ import { Message } from '@root/common/entities/message.entity'
 import { HasOne } from '@root/common/entities/common/Relationship'
 import { faker } from '@faker-js/faker'
 import { MessageResponse } from '../dto/message.dto'
-import { MessageService } from './send-message.service'
+import { MessageService } from './message.service'
 
 describe('SendMessageService', () => {
     let testModule: TestModule

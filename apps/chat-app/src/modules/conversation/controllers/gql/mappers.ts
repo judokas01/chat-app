@@ -1,6 +1,12 @@
 import { Conversation } from '@root/common/entities/conversation.entity'
 import { User } from '@root/common/entities/user.entity'
-import { ConversationUser, Conversation as GqlConversation } from './response'
+import { GetMessagesResponse, MessageResponse } from '../../dto/message.dto'
+import {
+    ConversationMessageResponse,
+    ConversationUser as GqlConversationUser,
+    Conversation as GqlConversation,
+    Message as GqlMessage,
+} from './response'
 
 export const toGqlConversation = (conversation: Conversation): GqlConversation => {
     const { id, data } = conversation
@@ -15,8 +21,40 @@ export const toGqlConversation = (conversation: Conversation): GqlConversation =
     }
 }
 
-export const toGqlUser = (user: Readonly<User>): ConversationUser => ({
+export const toGqlUser = (user: Readonly<User>): GqlConversationUser => ({
     email: user.data.email,
     id: user.id,
     userName: user.data.userName,
+})
+
+export const toConversationResponse = (
+    conversation: GetMessagesResponse,
+): ConversationMessageResponse => {
+    const { cursor, hasMore, messages } = conversation
+
+    return {
+        cursor: cursor,
+        hasMore: hasMore,
+        messages: messages.map(toGqlMessage),
+    }
+}
+
+export const toGqlMessage = ({
+    author,
+    createdAt,
+    id,
+    isRemoved,
+    text,
+}: MessageResponse): GqlMessage => ({
+    author: toGqlAuthor(author),
+    createdAt,
+    id,
+    isRemoved,
+    text,
+})
+
+const toGqlAuthor = ({ email, id, userName }: GqlMessage['author']): GqlConversationUser => ({
+    email,
+    id,
+    userName,
 })

@@ -8,7 +8,7 @@ import { MessagePrismaRepository } from '@root/common/repositories/message/prism
 import { IConversationRepository } from '../../common/repositories/conversation.repository'
 import { PrismaConversationRepository } from '../../common/repositories/conversation/prisma/conversation.repository'
 import { CreateConversationService } from './create-conversation/create-conversation.service'
-import { MessageService } from './message/send-message.service'
+import { MessageService } from './message/message.service'
 import { ConversationController } from './controllers/rest/conversation.controller'
 import { ConversationResolver } from './controllers/gql/conversation.resolver'
 import { GetConversationService } from './get-conversation/get-conversation.service'

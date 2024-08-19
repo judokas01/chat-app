@@ -29,3 +29,33 @@ export class ConversationUser {
     @Field(() => String)
     email: string
 }
+
+@ObjectType()
+export class ConversationMessageResponse {
+    @Field(() => String)
+    cursor: string
+
+    @Field(() => Boolean)
+    hasMore: boolean
+
+    @Field(() => [Message])
+    messages: Message[]
+}
+
+@ObjectType()
+export class Message {
+    @Field(() => String)
+    id: string
+
+    @Field(() => String)
+    text: string
+
+    @Field(() => ConversationUser)
+    author: ConversationUser
+
+    @Field(() => Date)
+    createdAt: Date
+
+    @Field(() => Boolean)
+    isRemoved: boolean
+}
