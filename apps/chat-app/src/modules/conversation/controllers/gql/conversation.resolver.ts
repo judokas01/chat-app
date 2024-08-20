@@ -60,7 +60,7 @@ export class ConversationResolver {
     @Mutation(() => Message, { name: 'sendMessage' })
     async sendMessage(@Args() { conversationId, text }: SendMessageArgsGql): Promise<Message> {
         // implement auth and get user from context
-        const created = await this.messageService.send({ conversationId, text })
+        const created = await this.messageService.send({ authorId: '', conversationId, text })
         return toGqlMessage(created)
     }
 }

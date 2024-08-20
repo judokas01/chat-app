@@ -1,4 +1,4 @@
-import { ArgsType, Field } from '@nestjs/graphql'
+import { ArgsType, Field, Int, ObjectType } from '@nestjs/graphql'
 
 @ArgsType()
 export class GetConversationArgsGql {
@@ -24,6 +24,15 @@ export class CreateConversationArgsGql {
     name: string
 }
 
+@ObjectType()
+export class Pagination {
+    @Field(() => String)
+    cursor: string
+
+    @Field(() => Int)
+    limit: number
+}
+
 @ArgsType()
 export class GetConversationMessagesArgsGql {
     @Field()
@@ -31,15 +40,6 @@ export class GetConversationMessagesArgsGql {
 
     @Field(() => Pagination)
     pagination: Pagination
-}
-
-@ArgsType()
-export class Pagination {
-    @Field()
-    cursor: string
-
-    @Field()
-    limit: number
 }
 
 @ArgsType()
