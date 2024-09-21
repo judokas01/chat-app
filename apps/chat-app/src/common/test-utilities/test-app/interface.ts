@@ -2,7 +2,7 @@ import { Logger, Module, Type } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import supertest from 'supertest'
-import { apolloModule } from '@root/common/graphql/apollo'
+import { apolloModuleUseTypes } from '@root/common/graphql/apollo'
 import { UserPrismaRepository } from '@root/common/repositories/user/prisma/user.repository'
 import { IUserRepository } from '@root/common/repositories/user.repository'
 import { IConversationRepository } from '@root/common/repositories/conversation.repository'
@@ -19,7 +19,7 @@ export const getTestModuleWithInterface = async (args: {
     providers?: Type<any>[]
 }) => {
     @Module({
-        imports: [args.module, apolloModule],
+        imports: [args.module, apolloModuleUseTypes],
         providers: [
             { provide: IUserRepository, useClass: UserPrismaRepository },
             { provide: IConversationRepository, useClass: PrismaConversationRepository },

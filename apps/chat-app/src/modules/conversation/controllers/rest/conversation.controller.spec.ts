@@ -1,4 +1,4 @@
-import { describe, it, expect, afterAll, beforeAll } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import {
     getTestModuleWithInterface,
     TestInterfaceModule,
@@ -10,17 +10,17 @@ describe('ConversationController', () => {
     let testModule: TestInterfaceModule
     let controller: ConversationController
 
-    beforeAll(async () => {
+    beforeEach(async () => {
         testModule = await getTestModuleWithInterface({
             module: ConversationModule,
-            providers: [ConversationController],
+            providers: [],
         })
 
         controller = testModule.module.get<ConversationController>(ConversationController)
         await testModule.cleanDb()
     })
 
-    afterAll(async () => {
+    afterEach(async () => {
         await testModule.destroy()
     })
 

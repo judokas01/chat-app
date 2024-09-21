@@ -13,7 +13,7 @@ describe('ConversationResolver', () => {
     beforeEach(async () => {
         testModule = await getTestModuleWithInterface({
             module: ConversationModule,
-            providers: [ConversationResolver],
+            providers: [],
         })
 
         resolver = testModule.module.get<ConversationResolver>(ConversationResolver)

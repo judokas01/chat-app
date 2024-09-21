@@ -18,7 +18,9 @@
     "_build:check": "nx run-many --target=build:check",
     "_with-test-env": "yarn env-cmd -f .env.test --silent",
     "check:build": "tsc --p apps/chat-app/tsconfig.app.json --noEmit",
-    "test": "yarn _with-test-env vitest --run",
+    "test": "yarn _test:generate-types && yarn _with-test-env vitest --run",
+    "_test:generate-types": "yarn _run apps/chat-app/src/generate-gql-types.ts",
+    "_run": "TS_NODE_PROJECT=apps/chat-app/tsconfig.app.json yarn ts-node -r tsconfig-paths/register --esm",
     "test:watch": "yarn _with-test-env vitest --watch "
   },
   "prisma": {
