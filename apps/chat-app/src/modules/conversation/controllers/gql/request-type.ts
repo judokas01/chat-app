@@ -9,10 +9,10 @@ export class GetConversationArgsGql {
 @ArgsType()
 export class FindUsersArgsGql {
     @Field({ nullable: true })
-    userName: string
+    userName?: string
 
     @Field({ nullable: true })
-    email: string
+    email?: string
 }
 
 @ArgsType()
