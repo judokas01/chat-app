@@ -19,7 +19,7 @@
     "_with-test-env": "yarn env-cmd -f .env.test --silent",
     "check:build": "tsc --p apps/chat-app/tsconfig.app.json --noEmit",
     "test": "yarn _test:generate-types && yarn _with-test-env vitest --run",
-    "_test:generate-types": "yarn _run apps/chat-app/src/generate-gql-types.ts",
+    "_test:generate-types": "yarn _run apps/chat-app/src/scripts/generate-gql-types.ts",
     "_run": "TS_NODE_PROJECT=apps/chat-app/tsconfig.app.json yarn ts-node -r tsconfig-paths/register --esm",
     "test:watch": "yarn _with-test-env vitest --watch "
   },
@@ -55,7 +55,12 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@0no-co/graphqlsp": "^1.12.14",
     "@faker-js/faker": "^8.4.1",
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/core": "^4.0.2",
+    "@graphql-codegen/schema-ast": "^4.1.0",
+    "@graphql-codegen/typescript": "^4.0.9",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.0.2",
     "@nx/eslint": "19.1.1",

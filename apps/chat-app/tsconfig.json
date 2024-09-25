@@ -1,18 +1,25 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "files": [],
-  "include": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
+    "extends": "../../tsconfig.base.json",
+    "files": [],
+    "include": [],
+    "references": [
+        {
+            "path": "./tsconfig.app.json"
+        },
+        {
+            "path": "./tsconfig.spec.json"
+        }
+    ],
+    "compilerOptions": {
+        "esModuleInterop": true,
+        "paths": {
+            "@root/*": ["apps/chat-app/src/*"]
+        },
+        "plugins": [
+            {
+                "name": "@0no-co/graphqlsp",
+                "schema": "./schema.graphql"
+            }
+        ]
     }
-  ],
-  "compilerOptions": {
-    "esModuleInterop": true,
-    "paths": {
-      "@root/*": ["apps/chat-app/src/*"],}
-  }
 }
