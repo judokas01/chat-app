@@ -3,21 +3,16 @@ import type { CodegenConfig } from '@graphql-codegen/cli'
 const config: CodegenConfig = {
     documents: ['src/**/*.ts'],
     generates: {
-        './schema.graphql': {
-            config: {
-                includeDirectives: true,
-            },
-            plugins: ['schema-ast'],
-        },
-        './src/graphql/': {
+        './libs/graphql/types/': {
             config: {
                 documentMode: 'string',
             },
+            plugins: ['typed-document-node'],
             preset: 'client',
         },
     },
     ignoreNoDocuments: true,
-    schema: 'http://localhost:3000/graphql',
+    schema: './libs/graphql/graphql-schema.graphql',
 }
 
 export default config
