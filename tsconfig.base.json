@@ -14,10 +14,12 @@
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
-        "paths": {},
+        "paths": {
+            "@libs": ["libs"]
+        },
         "strict": true,
         "strictNullChecks": true,
         "strictPropertyInitialization": false
     },
-    "exclude": ["node_modules", "tmp"]
+    "exclude": ["node_modules", "tmp"],
 }

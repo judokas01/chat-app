@@ -1,14 +1,10 @@
 import type { CodegenConfig } from '@graphql-codegen/cli'
 
 const config: CodegenConfig = {
-    documents: ['src/**/*.ts'],
+    documents: './src/**/*.graphql',
     generates: {
         './libs/graphql/types/': {
-            config: {
-                documentMode: 'string',
-            },
-            plugins: ['typed-document-node'],
-            preset: 'client',
+            preset: 'client-preset',
         },
     },
     ignoreNoDocuments: true,

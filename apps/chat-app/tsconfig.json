@@ -13,7 +13,8 @@
     "compilerOptions": {
         "esModuleInterop": true,
         "paths": {
-            "@root/*": ["apps/chat-app/src/*"]
+            "@root/*": ["apps/chat-app/src/*"],
+            "@libs/*": ["libs/*"]
         },
         "plugins": [
             {
