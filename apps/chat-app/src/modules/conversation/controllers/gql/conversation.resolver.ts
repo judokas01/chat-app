@@ -1,4 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { UseGuards } from '@nestjs/common'
+import { AuthGuard } from '@root/common/guards/authenticate/authenticate.guard'
 import { CreateConversationService } from '../../create-conversation/create-conversation.service'
 import { MessageService } from '../../message/message.service'
 import { GetConversationService } from '../../get-conversation/get-conversation.service'
@@ -28,6 +30,7 @@ export class ConversationResolver {
     ) {}
 
     @Query(() => [GqlConversation], { name: 'getUserConversations' })
+    @UseGuards(AuthGuard)
     async getUserConversations(
         @Args() { userId }: GetConversationArgsGql,
     ): Promise<GqlConversation[]> {

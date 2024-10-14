@@ -1,4 +1,4 @@
-import { Logger, Module, Type } from '@nestjs/common'
+import { Logger, Module, Provider, Type } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import supertest from 'supertest'
@@ -9,6 +9,8 @@ import { IConversationRepository } from '@root/common/repositories/conversation.
 import { PrismaConversationRepository } from '@root/common/repositories/conversation/prisma/conversation.repository'
 import { IMessageRepository } from '@root/common/repositories/message.repository'
 import { MessagePrismaRepository } from '@root/common/repositories/message/prisma/message.repository'
+import { AlwaysAuthenticatedAuthenticateService } from '@root/common/guards/authenticate/services/always-authenticated-authenticate.service'
+import { IAuthGuard } from '@root/common/guards/authenticate/authenticate.guard'
 import { ConfigService } from '../../config/config-service.service'
 import { cleanDb, getRepositories } from './common'
 
@@ -16,7 +18,7 @@ export const getTestModuleWithInterface = async (args: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     module: Type<any>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    providers?: Type<any>[]
+    providers?: Provider[]
 }) => {
     @Module({
         imports: [args.module, apolloModuleUseTypes],
@@ -26,6 +28,7 @@ export const getTestModuleWithInterface = async (args: {
             { provide: IMessageRepository, useClass: MessagePrismaRepository },
             PrismaService,
             ConfigService,
+            { provide: IAuthGuard, useClass: AlwaysAuthenticatedAuthenticateService },
             ...(args.providers || []),
         ],
     })

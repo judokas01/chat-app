@@ -5,6 +5,7 @@ import { IUserRepository } from '@root/common/repositories/user.repository'
 import { UserPrismaRepository } from '@root/common/repositories/user/prisma/user.repository'
 import { IMessageRepository } from '@root/common/repositories/message.repository'
 import { MessagePrismaRepository } from '@root/common/repositories/message/prisma/message.repository'
+import { JwtService } from '@nestjs/jwt'
 import { IConversationRepository } from '../../common/repositories/conversation.repository'
 import { PrismaConversationRepository } from '../../common/repositories/conversation/prisma/conversation.repository'
 import { CreateConversationService } from './create-conversation/create-conversation.service'
@@ -28,6 +29,7 @@ import { FindUserService } from './find-user/find-user.service'
         GetConversationService,
         FindUserService,
         ValidationPipe,
+        JwtService,
     ],
     providers: [
         { provide: IConversationRepository, useClass: PrismaConversationRepository },
@@ -41,6 +43,7 @@ import { FindUserService } from './find-user/find-user.service'
         GetConversationService,
         FindUserService,
         ValidationPipe,
+        JwtService,
     ],
 })
 export class ConversationModule {}
