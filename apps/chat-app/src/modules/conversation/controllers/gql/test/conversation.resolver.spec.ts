@@ -7,6 +7,8 @@ import { userMock } from '@root/common/test-utilities/mocks/user'
 import { conversationMock } from '@root/common/test-utilities/mocks/conversation'
 import { faker } from '@faker-js/faker'
 import { User } from '@root/common/entities/user.entity'
+import { AlwaysAuthenticatedAuthenticateService } from '@root/common/guards/authenticate/services/always-authenticated-authenticate.service'
+import { IAuthGuard } from '@root/common/guards/authenticate/authenticate.guard'
 import { ConversationModule } from '../../../conversation.module'
 import { ConversationUser, Conversation as GqlConversation } from '../response'
 import { FindUsersArgsGql } from '../request-type'
@@ -18,7 +20,7 @@ describe('ConversationResolver - smoke test', () => {
     beforeEach(async () => {
         testModule = await getTestModuleWithInterface({
             module: ConversationModule,
-            providers: [],
+            providers: [{ provide: IAuthGuard, useClass: AlwaysAuthenticatedAuthenticateService }],
         })
 
         await testModule.cleanDb()
