@@ -10,6 +10,7 @@ import { AuthGuard, IAuthGuard } from '@root/common/guards/authenticate/authenti
 import { JwtAuthGuard } from '@root/common/guards/authenticate/services/jwt-authenticate.service'
 import { IConversationRepository } from '../../common/repositories/conversation.repository'
 import { PrismaConversationRepository } from '../../common/repositories/conversation/prisma/conversation.repository'
+import { JWT } from '../auth/common/jwt.module'
 import { CreateConversationService } from './create-conversation/create-conversation.service'
 import { MessageService } from './message/message.service'
 import { ConversationController } from './controllers/rest/conversation.controller'
@@ -33,6 +34,7 @@ import { FindUserService } from './find-user/find-user.service'
         ValidationPipe,
         JwtService,
     ],
+    imports: [JWT],
     providers: [
         { provide: IConversationRepository, useClass: PrismaConversationRepository },
         { provide: IUserRepository, useClass: UserPrismaRepository },

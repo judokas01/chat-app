@@ -1,4 +1,4 @@
-import { Logger, Module, Provider, Type } from '@nestjs/common'
+import { Logger, Module, Provider, Type, ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import supertest from 'supertest'
@@ -16,18 +16,19 @@ import { cleanDb, getRepositories } from './common'
 
 export const getTestModuleWithInterface = async (args: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    module: Type<any>
+    module?: Type<any>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     providers?: Provider[]
 }) => {
     @Module({
-        imports: [args.module, apolloModuleUseTypes],
+        imports: [...(args?.module ? [args.module] : []), apolloModuleUseTypes],
         providers: [
             { provide: IUserRepository, useClass: UserPrismaRepository },
             { provide: IConversationRepository, useClass: PrismaConversationRepository },
             { provide: IMessageRepository, useClass: MessagePrismaRepository },
             PrismaService,
             ConfigService,
+            ValidationPipe,
             { provide: IAuthGuard, useClass: AlwaysAuthenticatedAuthenticateService },
             ...(args.providers || []),
         ],

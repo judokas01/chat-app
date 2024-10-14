@@ -9,6 +9,8 @@ import { faker } from '@faker-js/faker'
 import { User } from '@root/common/entities/user.entity'
 import { IAuthGuard } from '@root/common/guards/authenticate/authenticate.guard'
 import { JwtAuthGuard } from '@root/common/guards/authenticate/services/jwt-authenticate.service'
+import { JWTPayload } from '@root/modules/auth/common/types'
+import { JwtService } from '@nestjs/jwt'
 import { ConversationModule } from '../../../conversation.module'
 import { ConversationUser, Conversation as GqlConversation } from '../response'
 import { FindUsersArgsGql } from '../request-type'
@@ -16,6 +18,7 @@ import { findUsersGqlRequest, getUserConversationGqlRequest } from './helpers'
 
 describe('ConversationResolver - guard tests', () => {
     let testModule: TestInterfaceModule
+    let token: string
 
     beforeEach(async () => {
         testModule = await getTestModuleWithInterface({
@@ -24,13 +27,17 @@ describe('ConversationResolver - guard tests', () => {
         })
 
         await testModule.cleanDb()
+
+        const service = testModule.module.get<JwtService>(JwtService)
+        const jwtPayload: JWTPayload = { sub: 'someId', userName: 'someUser' }
+        token = `Bearer ` + (await service.signAsync(jwtPayload))
     })
 
     afterEach(async () => {
         await testModule.destroy()
     })
 
-    it('should return all users conversations', async () => {
+    it('should throw unauthorized error', async () => {
         const numberOfConversations = faker.number.int({ max: 5, min: 1 })
         const user = await userMock.random.createOne({}, testModule)
 
@@ -40,22 +47,11 @@ describe('ConversationResolver - guard tests', () => {
             ),
         )
 
-        const conversations = await testModule.requestGql.send(
-            getUserConversationGqlRequest({ userId: user.id }),
-        )
+        const conversations = await testModule.requestGql
+            .send(getUserConversationGqlRequest({ userId: user.id }))
+            .set('Authorization', token)
 
-        const items = conversations.body.data.getUserConversations as GqlConversation[]
-        expect(items).toHaveLength(numberOfConversations)
-
-        items.forEach((conversation) => {
-            expect(conversation).toMatchObject({
-                createdAt: expect.any(String),
-                id: expect.any(String),
-                lastMessageAt: null,
-                name: null,
-                users: expect.any(Array),
-            } satisfies GqlConversation)
-        })
+        expect(conversations.body.errors).toMatchSnapshot()
     })
 
     it.each([

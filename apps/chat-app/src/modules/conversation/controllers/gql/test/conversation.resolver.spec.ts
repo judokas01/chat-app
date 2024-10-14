@@ -8,10 +8,15 @@ import { conversationMock } from '@root/common/test-utilities/mocks/conversation
 import { faker } from '@faker-js/faker'
 import { User } from '@root/common/entities/user.entity'
 import { AlwaysAuthenticatedAuthenticateService } from '@root/common/guards/authenticate/services/always-authenticated-authenticate.service'
-import { IAuthGuard } from '@root/common/guards/authenticate/authenticate.guard'
-import { ConversationModule } from '../../../conversation.module'
-import { ConversationUser, Conversation as GqlConversation } from '../response'
+import { AuthGuard, IAuthGuard } from '@root/common/guards/authenticate/authenticate.guard'
+import { ConfigService } from '@root/common/config/config-service.service'
+import { CreateConversationService } from '@root/modules/conversation/create-conversation/create-conversation.service'
+import { FindUserService } from '@root/modules/conversation/find-user/find-user.service'
+import { GetConversationService } from '@root/modules/conversation/get-conversation/get-conversation.service'
+import { MessageService } from '@root/modules/conversation/message/message.service'
 import { FindUsersArgsGql } from '../request-type'
+import { ConversationUser, Conversation as GqlConversation } from '../response'
+import { ConversationResolver } from '../conversation.resolver'
 import { findUsersGqlRequest, getUserConversationGqlRequest } from './helpers'
 
 describe('ConversationResolver - smoke test', () => {
@@ -19,8 +24,17 @@ describe('ConversationResolver - smoke test', () => {
 
     beforeEach(async () => {
         testModule = await getTestModuleWithInterface({
-            module: ConversationModule,
-            providers: [{ provide: IAuthGuard, useClass: AlwaysAuthenticatedAuthenticateService }],
+            // todo find out how to easily override providers injected into the main module
+            providers: [
+                AuthGuard,
+                ConfigService,
+                CreateConversationService,
+                MessageService,
+                ConversationResolver,
+                GetConversationService,
+                FindUserService,
+                { provide: IAuthGuard, useClass: AlwaysAuthenticatedAuthenticateService },
+            ],
         })
 
         await testModule.cleanDb()
