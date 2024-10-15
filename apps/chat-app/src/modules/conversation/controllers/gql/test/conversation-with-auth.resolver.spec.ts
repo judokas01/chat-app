@@ -49,7 +49,7 @@ describe('ConversationResolver - guard tests', () => {
 
         const conversations = await testModule.requestGql
             .send(getUserConversationGqlRequest({ userId: user.id }))
-            .set('Authorization', token)
+            .set('Authorization', 'token')
 
         expect(conversations.body.errors).toMatchSnapshot()
     })

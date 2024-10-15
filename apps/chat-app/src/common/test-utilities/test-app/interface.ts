@@ -1,4 +1,4 @@
-import { Logger, Module, Provider, Type, ValidationPipe } from '@nestjs/common'
+import { DynamicModule, Logger, Module, Provider, Type, ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import supertest from 'supertest'
@@ -16,7 +16,7 @@ import { cleanDb, getRepositories } from './common'
 
 export const getTestModuleWithInterface = async (args: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    module?: Type<any>
+    module?: Type<any> | DynamicModule
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     providers?: Provider[]
 }) => {

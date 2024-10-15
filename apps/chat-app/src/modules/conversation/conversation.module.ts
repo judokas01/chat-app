@@ -1,4 +1,4 @@
-import { Module, ValidationPipe } from '@nestjs/common'
+import { DynamicModule, Module, Provider, ValidationPipe, ModuleMetadata } from '@nestjs/common'
 import { ConfigService } from '@root/common/config/config-service.service'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import { IUserRepository } from '@root/common/repositories/user.repository'
@@ -18,22 +18,8 @@ import { ConversationResolver } from './controllers/gql/conversation.resolver'
 import { GetConversationService } from './get-conversation/get-conversation.service'
 import { FindUserService } from './find-user/find-user.service'
 
-@Module({
+const defaultDeps: ModuleMetadata = {
     controllers: [ConversationController],
-    exports: [
-        { provide: IConversationRepository, useClass: PrismaConversationRepository },
-        { provide: IUserRepository, useClass: UserPrismaRepository },
-        { provide: IMessageRepository, useClass: MessagePrismaRepository },
-        ConfigService,
-        PrismaService,
-        CreateConversationService,
-        MessageService,
-        ConversationResolver,
-        GetConversationService,
-        FindUserService,
-        ValidationPipe,
-        JwtService,
-    ],
     imports: [JWT],
     providers: [
         { provide: IConversationRepository, useClass: PrismaConversationRepository },
@@ -51,5 +37,16 @@ import { FindUserService } from './find-user/find-user.service'
         ValidationPipe,
         JwtService,
     ],
-})
-export class ConversationModule {}
+}
+@Module(defaultDeps)
+export class ConversationModule {
+    static register(overrideProviders: Provider[]): DynamicModule {
+        return {
+            ...defaultDeps,
+            module: ConversationModule,
+            providers: defaultDeps.providers?.length
+                ? [...defaultDeps.providers!, ...overrideProviders]
+                : [...overrideProviders],
+        }
+    }
+}
