@@ -31,6 +31,7 @@ export class JwtAuthGuard implements IAuthGuard {
             }
             throw new UnauthorizedException()
         }
+
         GqlExecutionContext.create(context).getContext().user = this.jwtService.decode(token)
         gqlRequest.user = this.jwtService.decode(token)
 

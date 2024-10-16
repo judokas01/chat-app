@@ -20,9 +20,11 @@ describe('ConversationResolver - smoke test', () => {
     beforeEach(async () => {
         testModule = await getTestModuleWithInterface({
             module: ConversationModule.register([
-                { provide: IAuthGuard, useClass: AlwaysAuthenticatedAuthenticateService },
+                {
+                    provide: IAuthGuard,
+                    useClass: AlwaysAuthenticatedAuthenticateService,
+                },
             ]),
-            // todo find out how to easily override providers injected into the main module
         })
 
         await testModule.cleanDb()
