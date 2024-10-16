@@ -1,6 +1,7 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { UseGuards } from '@nestjs/common'
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { UnauthorizedException, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@root/common/guards/authenticate/authenticate.guard'
+import { GQLContext } from '@root/common/graphql/gql.context'
 import { CreateConversationService } from '../../create-conversation/create-conversation.service'
 import { MessageService } from '../../message/message.service'
 import { GetConversationService } from '../../get-conversation/get-conversation.service'
@@ -33,7 +34,11 @@ export class ConversationResolver {
     @UseGuards(AuthGuard)
     async getUserConversations(
         @Args() { userId }: GetConversationArgsGql,
+        @Context() { user }: GQLContext,
     ): Promise<GqlConversation[]> {
+        if (userId !== user.sub) {
+            throw new UnauthorizedException('Cannot get conversations of another user')
+        }
         const found = await this.getConversationService.getAllByUserId(userId)
         return found.map(toGqlConversation)
     }
@@ -61,9 +66,16 @@ export class ConversationResolver {
     }
 
     @Mutation(() => Message, { name: 'sendMessage' })
-    async sendMessage(@Args() { conversationId, text }: SendMessageArgsGql): Promise<Message> {
+    async sendMessage(
+        @Args() { conversationId, text }: SendMessageArgsGql,
+        @Context() { user }: GQLContext,
+    ): Promise<Message> {
         // implement auth and get user from context
-        const created = await this.messageService.send({ authorId: '', conversationId, text })
+        const created = await this.messageService.send({
+            authorId: user.sub,
+            conversationId,
+            text,
+        })
         return toGqlMessage(created)
     }
 }

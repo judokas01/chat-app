@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ConversationResolver - guard tests > should throw unauthorized error 1`] = `
+exports[`ConversationResolver - guard tests > should throw unauthorized error when invalid token is provided 1`] = `
 [
   {
     "extensions": {
@@ -17,6 +17,31 @@ exports[`ConversationResolver - guard tests > should throw unauthorized error 1`
       },
     ],
     "message": "Unauthorized",
+    "path": [
+      "getUserConversations",
+    ],
+  },
+]
+`;
+
+exports[`ConversationResolver - guard tests > should throw unauthorized error, when auth user is not the same as userId requested 1`] = `
+[
+  {
+    "extensions": {
+      "code": "UNAUTHENTICATED",
+      "originalError": {
+        "error": "Unauthorized",
+        "message": "Cannot get conversations of another user",
+        "statusCode": 401,
+      },
+    },
+    "locations": [
+      {
+        "column": 13,
+        "line": 3,
+      },
+    ],
+    "message": "Cannot get conversations of another user",
     "path": [
       "getUserConversations",
     ],

@@ -19,6 +19,7 @@ import { findUsersGqlRequest, getUserConversationGqlRequest } from './helpers'
 describe('ConversationResolver - guard tests', () => {
     let testModule: TestInterfaceModule
     let token: string
+    let authUser: User
 
     beforeEach(async () => {
         testModule = await getTestModuleWithInterface({
@@ -29,7 +30,8 @@ describe('ConversationResolver - guard tests', () => {
         await testModule.cleanDb()
 
         const service = testModule.module.get<JwtService>(JwtService)
-        const jwtPayload: JWTPayload = { sub: 'someId', userName: 'someUser' }
+        authUser = await userMock.random.createOne({}, testModule)
+        const jwtPayload: JWTPayload = { sub: authUser.id, userName: authUser.data.userName }
         token = `Bearer ` + (await service.signAsync(jwtPayload))
     })
 
@@ -37,7 +39,7 @@ describe('ConversationResolver - guard tests', () => {
         await testModule.destroy()
     })
 
-    it('should throw unauthorized error', async () => {
+    it('should throw unauthorized error when invalid token is provided', async () => {
         const numberOfConversations = faker.number.int({ max: 5, min: 1 })
         const user = await userMock.random.createOne({}, testModule)
 
@@ -49,9 +51,49 @@ describe('ConversationResolver - guard tests', () => {
 
         const conversations = await testModule.requestGql
             .send(getUserConversationGqlRequest({ userId: user.id }))
-            .set('Authorization', 'token')
+            .set('Authorization', 'invalidToken')
 
         expect(conversations.body.errors).toMatchSnapshot()
+    })
+
+    it('should throw unauthorized error, when auth user is not the same as userId requested', async () => {
+        const numberOfConversations = faker.number.int({ max: 5, min: 1 })
+        const user = await userMock.random.createOne({}, testModule)
+
+        await Promise.all(
+            Array.from({ length: numberOfConversations }).map(() =>
+                conversationMock.createOne({ user }, testModule),
+            ),
+        )
+
+        const conversations = await testModule.requestGql
+            .send(getUserConversationGqlRequest({ userId: user.id }))
+            .set('Authorization', token)
+
+        expect(conversations.body.errors).toMatchSnapshot()
+    })
+
+    it('should authenticate user when auth user matches the requested userId', async () => {
+        const numberOfConversations = faker.number.int({ max: 5, min: 1 })
+
+        await Promise.all(
+            Array.from({ length: numberOfConversations }).map(() =>
+                conversationMock.createOne({ user: authUser }, testModule),
+            ),
+        )
+
+        const conversations = await testModule.requestGql
+            .send(getUserConversationGqlRequest({ userId: authUser.id }))
+            .set('Authorization', token)
+
+        expect(conversations.body.errors).toBeUndefined()
+        expect(conversations.body.data.getUserConversations.at(0)).toMatchObject({
+            createdAt: expect.any(String),
+            id: expect.any(String),
+            lastMessageAt: null,
+            name: null,
+            users: expect.any(Array),
+        } satisfies GqlConversation)
     })
 
     it.each([

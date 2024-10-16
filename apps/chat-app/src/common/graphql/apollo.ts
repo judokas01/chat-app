@@ -4,7 +4,7 @@ import { GQLContext } from '@root/common/graphql/gql.context'
 
 export const apolloModuleAutoSchemaGen = GraphQLModule.forRoot<ApolloDriverConfig>({
     autoSchemaFile: './libs/graphql/graphql-schema.graphql',
-    context: ({ res, reg }: GQLContext) => ({ reg, res }),
+    context: ({ res, req: reg }: GQLContext) => ({ reg, res }),
     driver: ApolloDriver,
     installSubscriptionHandlers: true,
     playground: true,
@@ -12,7 +12,7 @@ export const apolloModuleAutoSchemaGen = GraphQLModule.forRoot<ApolloDriverConfi
 })
 
 export const apolloModuleUseTypes = GraphQLModule.forRoot<ApolloDriverConfig>({
-    context: ({ res, reg }: GQLContext) => ({ reg, res }),
+    context: ({ res, req: reg }: GQLContext) => ({ reg, res }),
     driver: ApolloDriver,
     installSubscriptionHandlers: true,
     playground: true,
