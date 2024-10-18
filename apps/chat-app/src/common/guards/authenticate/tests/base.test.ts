@@ -10,7 +10,7 @@ import { JWTPayload } from '@root/modules/auth/common/types'
 import { JWT } from '@root/modules/auth/common/jwt.module'
 import { faker } from '@faker-js/faker'
 import { subSeconds } from 'date-fns'
-import { IAuthGuard } from '../authenticate.guard'
+import { AuthGuard, IAuthGuard } from '../authenticate.guard'
 import { AlwaysAuthenticatedAuthenticateService } from '../services/always-authenticated-authenticate.service'
 import { JwtAuthGuard } from '../services/jwt-authenticate.service'
 import { GuardTestingApiGql, GuardTestingApiRest } from './test-utils'
@@ -37,6 +37,7 @@ describe('YourController', () => {
                     GuardTestingApiGql,
                     { provide: IAuthGuard, useClass: JwtAuthGuard },
                     ConfigService,
+                    AuthGuard,
                 ],
             })
             class TestAppMod {}
@@ -155,7 +156,12 @@ describe('YourController', () => {
                 ],
                 providers: [
                     GuardTestingApiGql,
-                    { provide: IAuthGuard, useClass: AlwaysAuthenticatedAuthenticateService },
+                    {
+                        provide: IAuthGuard,
+                        useClass: AlwaysAuthenticatedAuthenticateService,
+                    },
+
+                    AuthGuard,
                 ],
             })
             class TestAppMod {}

@@ -5,12 +5,22 @@ import { IAuthGuard } from '../authenticate.guard'
 
 @Injectable()
 export class AlwaysAuthenticatedAuthenticateService implements IAuthGuard {
-    constructor(private user: JWTPayload = alwaysAuthenticatedUser) {}
+    constructor() {}
 
-    canActivate(_context: ExecutionContext) {
-        GqlExecutionContext.create(_context).getContext().user = this.user
+    private payload?: JWTPayload
+
+    canActivate = (context: ExecutionContext) => {
+        GqlExecutionContext.create(context).getContext().user = this.payload
         return true
     }
-}
 
-export const alwaysAuthenticatedUser = { sub: 'some-id', userName: 'someUserName' }
+    static createWithPayload = (payload: JWTPayload) => {
+        const service = new AlwaysAuthenticatedAuthenticateService().setPayload(payload)
+        return service
+    }
+
+    private setPayload = (payload: JWTPayload) => {
+        this.payload = payload
+        return this
+    }
+}

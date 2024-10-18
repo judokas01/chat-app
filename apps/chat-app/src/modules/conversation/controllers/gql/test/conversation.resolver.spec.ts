@@ -10,24 +10,33 @@ import { User } from '@root/common/entities/user.entity'
 import { AlwaysAuthenticatedAuthenticateService } from '@root/common/guards/authenticate/services/always-authenticated-authenticate.service'
 import { IAuthGuard } from '@root/common/guards/authenticate/authenticate.guard'
 import { ConversationModule } from '@root/modules/conversation/conversation.module'
+import { getTestModule } from '@root/common/test-utilities/test-app/no-interface'
+import { responseContainsNoErrors } from '@root/common/graphql/test-utils'
 import { FindUsersArgsGql } from '../request-type'
 import { ConversationUser, Conversation as GqlConversation } from '../response'
 import { findUsersGqlRequest, getUserConversationGqlRequest } from './helpers'
 
 describe('ConversationResolver - smoke test', () => {
     let testModule: TestInterfaceModule
+    let authenticatedUser: User
 
     beforeEach(async () => {
+        const tempModule = await getTestModule({})
+        await tempModule.cleanDb()
+        authenticatedUser = await userMock.random.createOne({}, tempModule)
+
         testModule = await getTestModuleWithInterface({
             module: ConversationModule.register([
                 {
                     provide: IAuthGuard,
-                    useClass: AlwaysAuthenticatedAuthenticateService,
+                    useFactory: () =>
+                        AlwaysAuthenticatedAuthenticateService.createWithPayload({
+                            sub: authenticatedUser.id,
+                            userName: authenticatedUser.data.userName,
+                        }),
                 },
             ]),
         })
-
-        await testModule.cleanDb()
     })
 
     afterEach(async () => {
@@ -36,7 +45,7 @@ describe('ConversationResolver - smoke test', () => {
 
     it('should return all users conversations', async () => {
         const numberOfConversations = faker.number.int({ max: 5, min: 1 })
-        const user = await userMock.random.createOne({}, testModule)
+        const user = authenticatedUser
 
         await Promise.all(
             Array.from({ length: numberOfConversations }).map(() =>
@@ -44,11 +53,13 @@ describe('ConversationResolver - smoke test', () => {
             ),
         )
 
-        const conversations = await testModule.requestGql.send(
+        const { body } = await testModule.requestGql.send(
             getUserConversationGqlRequest({ userId: user.id }),
         )
 
-        const items = conversations.body.data.getUserConversations as GqlConversation[]
+        responseContainsNoErrors(body)
+
+        const items = body.data.getUserConversations as GqlConversation[]
         expect(items).toHaveLength(numberOfConversations)
 
         items.forEach((conversation) => {

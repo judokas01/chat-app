@@ -70,7 +70,6 @@ export class ConversationResolver {
         @Args() { conversationId, text }: SendMessageArgsGql,
         @Context() { user }: GQLContext,
     ): Promise<Message> {
-        // implement auth and get user from context
         const created = await this.messageService.send({
             authorId: user.sub,
             conversationId,
