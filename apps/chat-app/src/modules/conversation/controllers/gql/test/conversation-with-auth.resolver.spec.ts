@@ -11,6 +11,7 @@ import { IAuthGuard } from '@root/common/guards/authenticate/authenticate.guard'
 import { JwtAuthGuard } from '@root/common/guards/authenticate/services/jwt-authenticate.service'
 import { JWTPayload } from '@root/modules/auth/common/types'
 import { JwtService } from '@nestjs/jwt'
+import { responseContainsNoErrors } from '@root/common/graphql/test-utils'
 import { ConversationModule } from '../../../conversation.module'
 import { ConversationUser, Conversation as GqlConversation } from '../response'
 import { FindUsersArgsGql } from '../request-type'
@@ -66,11 +67,11 @@ describe('ConversationResolver - guard tests', () => {
             ),
         )
 
-        const conversations = await testModule.requestGql
+        const { body } = await testModule.requestGql
             .send(getUserConversationGqlRequest({ userId: user.id }))
             .set('Authorization', token)
 
-        expect(conversations.body.errors).toMatchSnapshot()
+        expect(body.errors).toMatchSnapshot()
     })
 
     it('should authenticate user when auth user matches the requested userId', async () => {
@@ -82,12 +83,13 @@ describe('ConversationResolver - guard tests', () => {
             ),
         )
 
-        const conversations = await testModule.requestGql
+        const { body } = await testModule.requestGql
             .send(getUserConversationGqlRequest({ userId: authUser.id }))
             .set('Authorization', token)
 
-        expect(conversations.body.errors).toBeUndefined()
-        expect(conversations.body.data.getUserConversations.at(0)).toMatchObject({
+        responseContainsNoErrors(body)
+
+        expect(body.data.getUserConversations.at(0)).toMatchObject({
             createdAt: expect.any(String),
             id: expect.any(String),
             lastMessageAt: null,
@@ -113,18 +115,20 @@ describe('ConversationResolver - guard tests', () => {
             text: 'by both',
         },
     ])('should return all users found by $text', async ({ getArgs }) => {
-        const user = await userMock.random.createOne({}, testModule)
+        const { body } = await testModule.requestGql
+            .send(findUsersGqlRequest(getArgs(authUser)))
+            .set('Authorization', token)
 
-        const conversations = await testModule.requestGql.send(findUsersGqlRequest(getArgs(user)))
+        responseContainsNoErrors(body)
 
-        const items = conversations.body.data.findUsers as ConversationUser[]
+        const items = body.data.findUsers as ConversationUser[]
         expect(items).toHaveLength(1)
 
         items.forEach((conversation) => {
             expect(conversation).toMatchObject({
-                email: user.data.email,
-                id: user.id,
-                userName: user.data.userName,
+                email: authUser.data.email,
+                id: authUser.id,
+                userName: authUser.data.userName,
             } satisfies ConversationUser)
         })
     })

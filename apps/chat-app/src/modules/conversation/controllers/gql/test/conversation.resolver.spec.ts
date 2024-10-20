@@ -92,9 +92,10 @@ describe('ConversationResolver - smoke test', () => {
     ])('should return all users found by $text', async ({ getArgs }) => {
         const user = await userMock.random.createOne({}, testModule)
 
-        const conversations = await testModule.requestGql.send(findUsersGqlRequest(getArgs(user)))
+        const { body } = await testModule.requestGql.send(findUsersGqlRequest(getArgs(user)))
 
-        const items = conversations.body.data.findUsers as ConversationUser[]
+        responseContainsNoErrors(body)
+        const items = body.data.findUsers as ConversationUser[]
         expect(items).toHaveLength(1)
 
         items.forEach((conversation) => {

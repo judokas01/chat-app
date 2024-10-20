@@ -22,6 +22,7 @@ import {
 } from './request-type'
 
 @Resolver()
+@UseGuards(AuthGuard)
 export class ConversationResolver {
     constructor(
         private conversationService: CreateConversationService,
@@ -31,7 +32,6 @@ export class ConversationResolver {
     ) {}
 
     @Query(() => [GqlConversation], { name: 'getUserConversations' })
-    @UseGuards(AuthGuard)
     async getUserConversations(
         @Args() { userId }: GetConversationArgsGql,
         @Context() { user }: GQLContext,
