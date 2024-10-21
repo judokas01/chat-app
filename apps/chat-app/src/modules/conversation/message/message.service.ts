@@ -47,6 +47,8 @@ export class MessageService {
             text,
         })
 
+        await this.conversationRepository.updateOne(conversation.updateLastMessageAt())
+
         const userMap = await this.getAuthorsFromMessages([newMessage])
 
         return {

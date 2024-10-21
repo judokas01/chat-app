@@ -13,6 +13,12 @@ export class Conversation {
         return this.conversation.id
     }
 
+    updateLastMessageAt = () => {
+        const clone = this.clone()
+        clone.conversation.lastMessageAt = new Date()
+        return clone
+    }
+
     clone = () => new Conversation({ ...this.conversation })
 }
 

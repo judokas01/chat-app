@@ -1,4 +1,9 @@
-import { FindUsersArgsGql, GetConversationArgsGql } from '../request-type'
+import {
+    CreateConversationArgsGql,
+    FindUsersArgsGql,
+    GetConversationArgsGql,
+    SendMessageArgsGql,
+} from '../request-type'
 
 export const getUserConversationGqlRequest = (
     args: GetConversationArgsGql,
@@ -32,6 +37,52 @@ export const findUsersGqlRequest = (
                 email
                 id
                 userName
+            }
+        }`,
+        variables: args,
+    }
+}
+
+export const createConversationMutationGqlRequest = (
+    args: CreateConversationArgsGql,
+): { query: string; variables: CreateConversationArgsGql } => {
+    return {
+        query: `
+          mutation (
+            $name: String,
+            $userIds: [String!]!
+            ) {
+                createConversation(name:$name, userIds:$userIds) {
+                    id
+                    name
+                    users {
+                    id
+                    email
+                    userName
+                    }
+                }
+            }`,
+        variables: args,
+    }
+}
+
+export const sendMessageMutationGqlRequest = (
+    args: SendMessageArgsGql,
+): { query: string; variables: SendMessageArgsGql } => {
+    return {
+        query: `
+          mutation ($conversationId: String!,
+            $text: String!) {
+            sendMessage(conversationId:$conversationId, text: $text){
+                author {
+                email
+                id
+                userName
+                }
+                createdAt
+                id
+                isRemoved
+                text
             }
         }`,
         variables: args,

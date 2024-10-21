@@ -3,7 +3,7 @@ import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import { ConversationInput, Conversation } from '@root/common/entities/conversation.entity'
 import { User } from '@root/common/entities/user.entity'
 import { IConversationRepository } from '../../conversation.repository'
-import { toConversationCreate, toCoreConversation } from './mappers'
+import { toConversationCreate, toConversationUpdate, toCoreConversation } from './mappers'
 
 @Injectable()
 export class PrismaConversationRepository implements IConversationRepository {
@@ -57,5 +57,14 @@ export class PrismaConversationRepository implements IConversationRepository {
         })
 
         return found.map(toCoreConversation)
+    }
+
+    updateOne = async (conversation: Conversation): Promise<Conversation> => {
+        const updated = await this.prisma.conversation.update({
+            data: toConversationUpdate(conversation),
+            where: { id: conversation.id },
+        })
+
+        return toCoreConversation(updated)
     }
 }

@@ -23,7 +23,7 @@ export const toCoreConversation = (
     return new Conversation({
         createdAt,
         id,
-        lastMessageAt,
+        lastMessageAt: lastMessageAt ? new Date(lastMessageAt) : null,
         messages: messages
             ? HasMany.loaded(messages.map(toCoreMessage), 'conversation.messages')
             : HasMany.unloaded('conversation.messages'),
@@ -64,6 +64,17 @@ export const toConversationCreate = (
                   },
               }
             : undefined,
+    }
+}
+
+export const toConversationUpdate = (
+    conversation: Conversation,
+): Prisma.ConversationUpdateInput => {
+    const { name, lastMessageAt, createdAt } = conversation.data
+    return {
+        createdAt: new Date(createdAt),
+        customName: name,
+        lastMessageAt,
     }
 }
 

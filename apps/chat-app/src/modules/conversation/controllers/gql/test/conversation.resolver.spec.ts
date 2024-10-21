@@ -12,9 +12,16 @@ import { IAuthGuard } from '@root/common/guards/authenticate/authenticate.guard'
 import { ConversationModule } from '@root/modules/conversation/conversation.module'
 import { getTestModule } from '@root/common/test-utilities/test-app/no-interface'
 import { responseContainsNoErrors } from '@root/common/graphql/test-utils'
+import { ConversationData } from '@root/common/entities/conversation.entity'
+import { HasMany } from '@root/common/entities/common/Relationship'
 import { FindUsersArgsGql } from '../request-type'
-import { ConversationUser, Conversation as GqlConversation } from '../response'
-import { findUsersGqlRequest, getUserConversationGqlRequest } from './helpers'
+import { ConversationUser, Conversation as GqlConversation, Message } from '../response'
+import {
+    createConversationMutationGqlRequest,
+    findUsersGqlRequest,
+    getUserConversationGqlRequest,
+    sendMessageMutationGqlRequest,
+} from './helpers'
 
 describe('ConversationResolver - smoke test', () => {
     let testModule: TestInterfaceModule
@@ -105,5 +112,91 @@ describe('ConversationResolver - smoke test', () => {
                 userName: user.data.userName,
             } satisfies ConversationUser)
         })
+    })
+
+    it('should create conversation and retrieve it', async () => {
+        const secondUser = await userMock.random.createOne({}, testModule)
+
+        const { body } = await testModule.requestGql.send(
+            createConversationMutationGqlRequest({
+                name: faker.internet.userName(),
+                userIds: [secondUser.id, authenticatedUser.id],
+            }),
+        )
+
+        responseContainsNoErrors(body)
+
+        const conversation = await testModule.repositories.conversation.findById(
+            body.data.createConversation.id,
+        )
+
+        expect(conversation).not.toBeNull()
+        expect(conversation?.data).toMatchObject({
+            createdAt: expect.any(Date),
+            id: expect.any(String),
+            lastMessageAt: null,
+            messages: expect.any(HasMany),
+            name: expect.any(String),
+            participants: expect.any(HasMany),
+        } satisfies ConversationData)
+
+        const participants = conversation?.data.participants.get()
+
+        expect(participants).toHaveLength(2)
+        expect(participants!.map((e) => e.id).sort()).toEqual(
+            [secondUser.id, authenticatedUser.id].sort(),
+        )
+    })
+
+    it('should send a message to conversation and retrieve it', async () => {
+        const messageText = faker.lorem.sentence()
+        const { conversation } = await conversationMock.createOne(
+            {
+                conversation: {
+                    lastMessageAt: null,
+                    name: faker.internet.userName(),
+                },
+                user: authenticatedUser,
+            },
+            testModule,
+        )
+
+        const { body } = await testModule.requestGql.send(
+            sendMessageMutationGqlRequest({
+                conversationId: conversation.id,
+                text: messageText,
+            }),
+        )
+
+        responseContainsNoErrors(body)
+        expect(body.data.sendMessage).toMatchObject({
+            author: {
+                email: authenticatedUser.data.email,
+                id: authenticatedUser.id,
+                userName: authenticatedUser.data.userName,
+            },
+            createdAt: expect.any(String),
+            id: expect.any(String),
+            isRemoved: false,
+            text: expect.any(String),
+        } satisfies Message)
+
+        const updatedConversation = await testModule.repositories.conversation.findById(
+            conversation.id,
+        )
+
+        const messages = updatedConversation?.data.messages.get()
+        expect(messages).toHaveLength(1)
+        const message = messages!.at(0)
+        expect(message?.data.text).toEqual(messageText)
+
+        expect(conversation?.data).toMatchObject({
+            createdAt: expect.any(Date),
+            id: expect.any(String),
+            lastMessageAt: expect.any(Date),
+            messages: expect.any(HasMany),
+            name: expect.any(String),
+            participants: expect.any(HasMany),
+        } satisfies ConversationData)
     })
 })
