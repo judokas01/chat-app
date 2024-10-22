@@ -123,3 +123,13 @@ export type RegisterResponse = {
   id: Scalars['String']['output'];
   userName: Scalars['String']['output'];
 };
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  getConversationMessagesSub: Message;
+};
+
+
+export type SubscriptionGetConversationMessagesSubArgs = {
+  conversationId: Scalars['String']['input'];
+};

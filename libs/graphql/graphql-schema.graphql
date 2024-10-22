@@ -63,3 +63,7 @@ type RegisterResponse {
   id: String!
   userName: String!
 }
+
+type Subscription {
+  getConversationMessagesSub(conversationId: String!): Message!
+}
