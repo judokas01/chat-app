@@ -1,7 +1,8 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Context, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql'
 import { UnauthorizedException, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@root/common/guards/authenticate/authenticate.guard'
 import { GQLContext } from '@root/common/graphql/gql.context'
+import { PubSub } from 'graphql-subscriptions'
 import { CreateConversationService } from '../../create-conversation/create-conversation.service'
 import { MessageService } from '../../message/message.service'
 import { GetConversationService } from '../../get-conversation/get-conversation.service'
@@ -20,6 +21,9 @@ import {
     GetConversationMessagesArgsGql,
     SendMessageArgsGql,
 } from './request-type'
+
+const MESSAGE_SUB_TOPIC = 'messageSent'
+const pubSub = new PubSub()
 
 @Resolver()
 @UseGuards(AuthGuard)
@@ -75,6 +79,19 @@ export class ConversationResolver {
             conversationId,
             text,
         })
+
+        pubSub.publish(MESSAGE_SUB_TOPIC, { messageSent: toGqlMessage(created) })
+
         return toGqlMessage(created)
+    }
+
+    @Subscription(() => Message, {
+        filter: (payload, variables: { conversationId: string }) =>
+            payload.messageSent.conversationId === variables.conversationId,
+        name: 'getConversationMessagesSub',
+    })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    getConversationMessagesSub(@Args('conversationId') conversationId: string) {
+        return pubSub.asyncIterator(MESSAGE_SUB_TOPIC)
     }
 }
