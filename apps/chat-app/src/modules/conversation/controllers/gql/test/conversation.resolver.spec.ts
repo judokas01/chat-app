@@ -190,7 +190,7 @@ describe('ConversationResolver - smoke test', () => {
         const message = messages!.at(0)
         expect(message?.data.text).toEqual(messageText)
 
-        expect(conversation?.data).toMatchObject({
+        expect(updatedConversation?.data).toMatchObject({
             createdAt: expect.any(Date),
             id: expect.any(String),
             lastMessageAt: expect.any(Date),
