@@ -1,4 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
+import { Conversation } from '@root/common/entities/conversation.entity'
+import { User } from '@root/common/entities/user.entity'
 import { IConversationRepository } from '@root/common/repositories/conversation.repository'
 import { IUserRepository } from '@root/common/repositories/user.repository'
 
@@ -15,5 +17,15 @@ export class GetConversationService {
         if (!user) return []
 
         return await this.conversationRepository.findAllByUserId(user.id)
+    }
+
+    getOneByIdAndUserId = async (args: {
+        userId: User['id']
+        conversationId: Conversation['id']
+    }) => {
+        return await this.conversationRepository.findOne({
+            id: args.conversationId,
+            userId: args.userId,
+        })
     }
 }

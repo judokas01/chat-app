@@ -67,4 +67,22 @@ export class PrismaConversationRepository implements IConversationRepository {
 
         return toCoreConversation(updated)
     }
+
+    findOne = async (args: {
+        id: Conversation['id']
+        userId: User['id']
+    }): Promise<Conversation | null> => {
+        const found = await this.prisma.conversation.findFirst({
+            where: {
+                id: args.id,
+                usersConversations: {
+                    some: {
+                        userId: args.userId,
+                    },
+                },
+            },
+        })
+
+        return found ? toCoreConversation(found) : null
+    }
 }

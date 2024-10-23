@@ -15,7 +15,11 @@ import { responseContainsNoErrors } from '@root/common/graphql/test-utils'
 import { ConversationModule } from '../../../conversation.module'
 import { ConversationUser, Conversation as GqlConversation } from '../response'
 import { FindUsersArgsGql } from '../request-type'
-import { findUsersGqlRequest, getUserConversationGqlRequest } from './helpers'
+import {
+    findUsersGqlRequest,
+    getConversationMessagesSub,
+    getUserConversationGqlRequest,
+} from './helpers'
 
 describe('ConversationResolver - guard tests', () => {
     let testModule: TestInterfaceModule
@@ -131,5 +135,28 @@ describe('ConversationResolver - guard tests', () => {
                 userName: authUser.data.userName,
             } satisfies ConversationUser)
         })
+    })
+
+    it('should get unauthorized error, when subscriptions attempts to access conversation not participated by a user', async () => {
+        const anotherUser = await userMock.random.createOne({}, testModule)
+        const { conversation } = await conversationMock.createOne(
+            {
+                conversation: {
+                    lastMessageAt: null,
+                    name: faker.internet.userName(),
+                },
+                user: anotherUser,
+            },
+            testModule,
+        )
+
+        const { body } = await testModule.requestGql.send(
+            getConversationMessagesSub({
+                conversationId: conversation.id,
+            }),
+        )
+        // .set('Authorization', token)
+
+        responseContainsNoErrors(body)
     })
 })

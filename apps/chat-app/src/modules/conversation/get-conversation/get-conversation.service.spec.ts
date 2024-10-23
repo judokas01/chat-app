@@ -50,4 +50,45 @@ describe('GetConversationService', () => {
 
         expect(found).toEqual(sorted)
     })
+
+    it('should return conversation by id and some userid', async () => {
+        const user = await userMock.random.createOne({}, testModule)
+
+        const { conversation } = await conversationMock.createOne(
+            {
+                conversation: {
+                    lastMessageAt: faker.datatype.boolean() ? faker.date.recent() : null,
+                },
+                user,
+            },
+            testModule,
+        )
+
+        const found = await service.getOneByIdAndUserId({
+            conversationId: conversation.id,
+            userId: user.id,
+        })
+
+        expect(found).not.toBeNull()
+    })
+
+    it('should return null when user is not part of existing conversation', async () => {
+        const user = await userMock.random.createOne({}, testModule)
+
+        const { conversation } = await conversationMock.createOne(
+            {
+                conversation: {
+                    lastMessageAt: faker.datatype.boolean() ? faker.date.recent() : null,
+                },
+            },
+            testModule,
+        )
+
+        const found = await service.getOneByIdAndUserId({
+            conversationId: conversation.id,
+            userId: user.id,
+        })
+
+        expect(found).toBeNull()
+    })
 })

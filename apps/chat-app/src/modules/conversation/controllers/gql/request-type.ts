@@ -51,3 +51,9 @@ export class SendMessageArgsGql {
     @Field()
     conversationId: string
 }
+
+@ArgsType()
+export class GetMessagesSubArgsGql {
+    @Field()
+    conversationId: string
+}

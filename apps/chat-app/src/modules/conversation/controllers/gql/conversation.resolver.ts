@@ -19,6 +19,7 @@ import {
     FindUsersArgsGql,
     GetConversationArgsGql,
     GetConversationMessagesArgsGql,
+    GetMessagesSubArgsGql,
     SendMessageArgsGql,
 } from './request-type'
 
@@ -91,7 +92,19 @@ export class ConversationResolver {
         name: 'getConversationMessagesSub',
     })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    getConversationMessagesSub(@Args('conversationId') conversationId: string) {
+    async getConversationMessagesSub(
+        @Args() { conversationId }: GetMessagesSubArgsGql,
+        @Context() { user }: GQLContext,
+    ) {
+        const conversation = await this.getConversationService.getOneByIdAndUserId({
+            conversationId,
+            userId: user.sub,
+        })
+
+        if (!conversation) {
+            throw new UnauthorizedException('Cannot get messages of another user')
+        }
+
         return pubSub.asyncIterator(MESSAGE_SUB_TOPIC)
     }
 }

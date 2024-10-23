@@ -2,6 +2,7 @@ import {
     CreateConversationArgsGql,
     FindUsersArgsGql,
     GetConversationArgsGql,
+    GetMessagesSubArgsGql,
     SendMessageArgsGql,
 } from '../request-type'
 
@@ -85,6 +86,25 @@ export const sendMessageMutationGqlRequest = (
                 text
             }
         }`,
+        variables: args,
+    }
+}
+
+export const getConversationMessagesSub = (
+    args: GetMessagesSubArgsGql,
+): { query: string; variables: GetMessagesSubArgsGql } => {
+    return {
+        query: `
+          subscription ($conversationId: String!){
+              getConversationMessagesSub(conversationId:$conversationId){
+                author{
+                  id
+                  email
+                }
+                id
+                text
+              }
+            }`,
         variables: args,
     }
 }
