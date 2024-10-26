@@ -45,8 +45,10 @@ export const toGqlMessage = ({
     id,
     isRemoved,
     text,
+    conversationId,
 }: MessageResponse): GqlMessage => ({
     author: toGqlAuthor(author),
+    conversationId,
     createdAt,
     id,
     isRemoved,

@@ -176,6 +176,7 @@ describe('ConversationResolver - smoke test', () => {
                 id: authenticatedUser.id,
                 userName: authenticatedUser.data.userName,
             },
+            conversationId: expect.any(String),
             createdAt: expect.any(String),
             id: expect.any(String),
             isRemoved: false,

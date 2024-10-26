@@ -58,4 +58,7 @@ export class Message {
 
     @Field(() => Boolean)
     isRemoved: boolean
+
+    @Field(() => String)
+    conversationId: string
 }

@@ -47,6 +47,8 @@ export class MessageResponse {
 
     text: string
 
+    conversationId: string
+
     author: MessageAuthor
 
     createdAt: Date

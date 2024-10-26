@@ -17,5 +17,21 @@ export const apolloModuleUseTypes = GraphQLModule.forRoot<ApolloDriverConfig>({
     installSubscriptionHandlers: true,
     playground: true,
     sortSchema: true,
+    subscriptions: {
+        'subscriptions-transport-ws': {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onConnect: (connectionParams: any) => {
+                console.log({ connectionParams })
+                return {
+                    req: {
+                        headers: {
+                            authorization:
+                                connectionParams.Authorization ?? connectionParams.authorization,
+                        },
+                    },
+                }
+            },
+        },
+    },
     typePaths: ['./**/*.graphql'],
 })

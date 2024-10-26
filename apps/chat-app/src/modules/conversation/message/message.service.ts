@@ -53,6 +53,7 @@ export class MessageService {
 
         return {
             author: this.getAuthor(authorId, userMap),
+            conversationId: conversationId,
             createdAt: newMessage.data.createdAt,
             id: newMessage.id,
             isRemoved: newMessage.data.isRemoved,
@@ -78,9 +79,10 @@ export class MessageService {
             cursor,
             hasMore,
             messages: items.map(({ data }) => {
-                const { author, id, createdAt, text, isRemoved } = data
+                const { author, id, createdAt, text, isRemoved, conversation } = data
                 return {
                     author: this.getAuthor(author.getId(), userMap),
+                    conversationId: conversation.getId(),
                     createdAt,
                     id,
                     isRemoved,

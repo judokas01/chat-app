@@ -34,6 +34,7 @@ type LoginResponse {
 
 type Message {
   author: ConversationUser!
+  conversationId: String!
   createdAt: DateTime!
   id: String!
   isRemoved: Boolean!

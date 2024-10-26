@@ -81,14 +81,18 @@ export class ConversationResolver {
             text,
         })
 
-        pubSub.publish(MESSAGE_SUB_TOPIC, { messageSent: toGqlMessage(created) })
+        console.log({ messageSent: toGqlMessage(created) })
+
+        await pubSub.publish(MESSAGE_SUB_TOPIC, toGqlMessage(created))
 
         return toGqlMessage(created)
     }
 
     @Subscription(() => Message, {
-        filter: (payload, variables: { conversationId: string }) =>
-            payload.messageSent.conversationId === variables.conversationId,
+        filter: (payload, variables: { conversationId: string }) => {
+            console.log({ payload, variables })
+            return payload.conversationId === variables.conversationId
+        },
         name: 'getConversationMessagesSub',
     })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
