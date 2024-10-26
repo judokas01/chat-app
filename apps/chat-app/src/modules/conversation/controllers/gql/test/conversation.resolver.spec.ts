@@ -202,7 +202,7 @@ describe('ConversationResolver - smoke test', () => {
         } satisfies ConversationData)
     })
 
-    it('should get unathorized error, when subscriptions attempts to access conversation not participated by a user', async () => {
+    it('should get unauthorized error, when subscriptions attempts to access conversation not participated by a user', async () => {
         const anotherUser = await userMock.random.createOne({}, testModule)
         const { conversation } = await conversationMock.createOne(
             {
@@ -215,9 +215,7 @@ describe('ConversationResolver - smoke test', () => {
             testModule,
         )
 
-        console.log(conversation)
-
-        const { body } = await testModule.requestGql.send(
+        const { body } = await testModule.subscribeGql.send(
             getConversationMessagesSub({
                 conversationId: conversation.id,
             }),

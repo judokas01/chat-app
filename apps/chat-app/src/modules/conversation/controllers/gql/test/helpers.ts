@@ -96,16 +96,19 @@ export const getConversationMessagesSub = (
 ): { query: string; variables: GetMessagesSubArgsGql } => {
     return {
         query: `
-          subscription ($conversationId: String!){
-              getConversationMessagesSub(conversationId:$conversationId){
-                author{
+          subscription($conversationId: String!) {
+              getConversationMessagesSub(conversationId: $conversationId) {
+                author {
                   id
                   email
                 }
                 id
                 text
+                conversationId
+                id
               }
-            }`,
+            }
+            `,
         variables: args,
     }
 }
