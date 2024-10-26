@@ -19,9 +19,7 @@ export const apolloModuleUseTypes = GraphQLModule.forRoot<ApolloDriverConfig>({
     sortSchema: true,
     subscriptions: {
         'subscriptions-transport-ws': {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            onConnect: (connectionParams: any) => {
-                console.log({ connectionParams })
+            onConnect: (connectionParams: ConnectionParams) => {
                 return {
                     req: {
                         headers: {
@@ -35,3 +33,5 @@ export const apolloModuleUseTypes = GraphQLModule.forRoot<ApolloDriverConfig>({
     },
     typePaths: ['./**/*.graphql'],
 })
+
+type ConnectionParams = { Authorization?: string; authorization?: string }

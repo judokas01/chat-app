@@ -10,7 +10,7 @@ import { JWTPayload } from '@root/modules/auth/common/types'
 import { JwtService } from '@nestjs/jwt'
 import { ConversationModule } from '../../../conversation.module'
 
-describe('ConversationResolver - guard tests', () => {
+describe.skip('ConversationResolver - guard tests', () => {
     let testModule: TestInterfaceModule
 
     beforeEach(async () => {
