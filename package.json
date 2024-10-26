@@ -18,7 +18,7 @@
     "_build:check": "nx run-many --target=build:check",
     "_with-test-env": "yarn env-cmd -f .env.test --silent",
     "check:build": "tsc --p apps/chat-app/tsconfig.app.json --noEmit",
-    "test": "yarn _with-test-env vitest --run",
+    "test": "yarn _test:generate-gql && yarn _with-test-env vitest --run",
     "gql:gen": "yarn _test:generate-gql && yarn _test:generate-gql-types",
     "_test:generate-gql": "yarn _run apps/chat-app/src/scripts/generate-gql-types.ts",
     "_test:generate-gql-types": "yarn graphql-codegen --config apps/chat-app/src/scripts/codegen.ts",

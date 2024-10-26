@@ -84,6 +84,7 @@ export const sendMessageMutationGqlRequest = (
                 id
                 isRemoved
                 text
+                conversationId
             }
         }`,
         variables: args,

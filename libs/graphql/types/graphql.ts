@@ -49,6 +49,7 @@ export type LoginResponse = {
 export type Message = {
   __typename?: 'Message';
   author: ConversationUser;
+  conversationId: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['String']['output'];
   isRemoved: Scalars['Boolean']['output'];
