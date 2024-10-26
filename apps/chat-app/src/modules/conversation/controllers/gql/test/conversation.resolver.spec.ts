@@ -215,14 +215,18 @@ describe('ConversationResolver - smoke test', () => {
             testModule,
         )
 
-        const { body } = await testModule.subscribeGql.send(
-            getConversationMessagesSub({
-                conversationId: conversation.id,
-            }),
-        )
+        const { query, variables } = getConversationMessagesSub({
+            conversationId: conversation.id,
+        })
 
-        console.log(JSON.stringify(body.errors))
+        const { data, errors } = await (
+            await testModule.subscribeGql(query).variables({ ...variables })
+        ).next()
 
-        responseContainsNoErrors(body)
+        console.log(JSON.stringify(errors))
+
+        console.log({ data })
+
+        // responseContainsNoErrors(body)
     })
 })

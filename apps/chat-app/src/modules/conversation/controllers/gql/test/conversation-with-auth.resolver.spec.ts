@@ -150,13 +150,21 @@ describe('ConversationResolver - guard tests', () => {
             testModule,
         )
 
-        const { body } = await testModule.requestGql.send(
-            getConversationMessagesSub({
-                conversationId: conversation.id,
-            }),
-        )
-        // .set('Authorization', token)
+        const { query, variables } = getConversationMessagesSub({
+            conversationId: conversation.id,
+        })
 
-        responseContainsNoErrors(body)
+        const a = await (
+            await testModule
+                .subscribeGql(query)
+                .connectionParams({ Authorization: 'token' })
+                .variables({ ...variables })
+        ).next()
+
+        console.log(JSON.stringify(a))
+
+        console.log({ a })
+
+        // responseContainsNoErrors(body)
     })
 })

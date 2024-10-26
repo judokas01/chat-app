@@ -2,6 +2,7 @@ import { DynamicModule, Logger, Module, Provider, Type, ValidationPipe } from '@
 import { NestFactory } from '@nestjs/core'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import supertest from 'supertest'
+import { supertestWs } from 'supertest-graphql'
 import { apolloModuleUseTypes } from '@root/common/graphql/apollo'
 import { UserPrismaRepository } from '@root/common/repositories/user/prisma/user.repository'
 import { IUserRepository } from '@root/common/repositories/user.repository'
@@ -52,6 +53,7 @@ export const getTestModuleWithInterface = async (args: {
         repositories: getRepositories(app),
         request: supertest(apiUrl),
         requestGql: supertest(gqlUrl).post(''),
+        subscribeGql: (query: string) => supertestWs(gqlUrl).subscribe(query),
     }
 }
 

@@ -121,6 +121,7 @@
     "prettier": "^3.2.5",
     "prisma": "^5.14.0",
     "supertest": "^7.0.0",
+    "supertest-graphql": "^1.1.4",
     "ts-jest": "^29.1.0",
     "ts-node": "10.9.1",
     "tsconfig-paths": "^4.2.0",
