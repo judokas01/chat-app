@@ -13,12 +13,13 @@ import { JWTPayload } from '@root/modules/auth/common/types'
 import { JwtService } from '@nestjs/jwt'
 import { responseContainsNoErrors } from '@root/common/graphql/test-utils'
 import { ConversationModule } from '../../../conversation.module'
-import { ConversationUser, Conversation as GqlConversation } from '../response'
+import { ConversationUser, Conversation as GqlConversation, Message } from '../response'
 import { FindUsersArgsGql } from '../request-type'
 import {
     findUsersGqlRequest,
     getConversationMessagesSub,
     getUserConversationGqlRequest,
+    sendMessageMutationGqlRequest,
 } from './helpers'
 
 describe('ConversationResolver - guard tests', () => {
@@ -137,9 +138,9 @@ describe('ConversationResolver - guard tests', () => {
         })
     })
 
-    it('should get unauthorized error, when subscriptions attempts to access conversation not participated by a user', async () => {
+    it('should get sub response when subscribing and other user sends new message to this conversation', async () => {
         const anotherUser = await userMock.random.createOne({}, testModule)
-        const { conversation } = await conversationMock.createOne(
+        const { conversation, users } = await conversationMock.createOne(
             {
                 conversation: {
                     lastMessageAt: null,
@@ -150,21 +151,45 @@ describe('ConversationResolver - guard tests', () => {
             testModule,
         )
 
+        const userWithinTheConversation = users.find((u) => u.id !== anotherUser.id) as User
+
+        const service = testModule.module.get<JwtService>(JwtService)
+        const jwtPayload: JWTPayload = {
+            sub: userWithinTheConversation.id,
+            userName: userWithinTheConversation.data.userName,
+        }
+        const token2 = `Bearer ` + (await service.signAsync(jwtPayload))
+
         const { query, variables } = getConversationMessagesSub({
             conversationId: conversation.id,
         })
 
-        const a = await (
-            await testModule
-                .subscribeGql(query)
-                .connectionParams({ Authorization: 'token' })
-                .variables({ ...variables })
-        ).next()
+        testModule.subscribeGql({ authToken: token2, query, variables })
+        await testModule.requestGql
+            .send(
+                sendMessageMutationGqlRequest({
+                    conversationId: conversation.id,
+                    text: 'messageText',
+                }),
+            )
+            .set('Authorization', token2)
 
-        console.log(JSON.stringify(a))
+        const { data, errors } = testModule.getSubscriptionResult()
+        expect(errors).toBeUndefined()
 
-        console.log({ a })
+        const retypedData = data as {
+            getConversationMessagesSub: Message
+        }
 
-        // responseContainsNoErrors(body)
+        expect(retypedData.getConversationMessagesSub).toMatchObject({
+            author: {
+                email: expect.any(String),
+                id: expect.any(String),
+                userName: expect.any(String),
+            },
+            conversationId: expect.any(String),
+            id: expect.any(String),
+            text: expect.any(String),
+        } satisfies Partial<Message>)
     })
 })

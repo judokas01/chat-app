@@ -14,7 +14,7 @@ export const apolloModuleAutoSchemaGen = GraphQLModule.forRoot<ApolloDriverConfi
 export const apolloModuleUseTypes = GraphQLModule.forRoot<ApolloDriverConfig>({
     context: ({ res, req: reg }: GQLContext) => ({ reg, res }),
     driver: ApolloDriver,
-    includeStacktraceInErrorResponses: true,
+    // includeStacktraceInErrorResponses: true,
     installSubscriptionHandlers: true,
     playground: true,
     sortSchema: true,

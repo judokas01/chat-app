@@ -2,7 +2,7 @@ import { DynamicModule, Logger, Module, Provider, Type, ValidationPipe } from '@
 import { NestFactory } from '@nestjs/core'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 import supertest from 'supertest'
-import { supertestWs } from 'supertest-graphql'
+import WebSocket from 'ws'
 import { apolloModuleUseTypes } from '@root/common/graphql/apollo'
 import { UserPrismaRepository } from '@root/common/repositories/user/prisma/user.repository'
 import { IUserRepository } from '@root/common/repositories/user.repository'
@@ -12,6 +12,8 @@ import { IMessageRepository } from '@root/common/repositories/message.repository
 import { MessagePrismaRepository } from '@root/common/repositories/message/prisma/message.repository'
 import { AlwaysAuthenticatedAuthenticateService } from '@root/common/guards/authenticate/services/always-authenticated-authenticate.service'
 import { IAuthGuard } from '@root/common/guards/authenticate/authenticate.guard'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { ExecutionResult, GraphQLError } from 'graphql'
 import { ConfigService } from '../../config/config-service.service'
 import { cleanDb, getRepositories } from './common'
 
@@ -46,14 +48,47 @@ export const getTestModuleWithInterface = async (args: {
     await app.listen(port)
     Logger.log(`🚀 Application is running on: ${apiUrl}`)
 
+    const GRAPHQL_ENDPOINT = `ws://localhost:${port}/graphql`
+    const getNetworkInterface = (token?: string) =>
+        new SubscriptionClient(
+            GRAPHQL_ENDPOINT,
+            { connectionParams: { Authorization: token }, reconnect: true },
+            WebSocket,
+        )
+
+    const subScriptionResult: {
+        data: ExecutionResult | null | undefined
+        errors: readonly GraphQLError[] | undefined
+    } = {
+        data: undefined,
+        errors: undefined,
+    }
+
     return {
-        cleanDb: cleanDb(app),
+        cleanDb: () => {
+            subScriptionResult.data = undefined
+            subScriptionResult.errors = undefined
+            return cleanDb(app)
+        },
         destroy: async () => await app.close(),
+        getSubscriptionResult: () => subScriptionResult,
         module: app,
         repositories: getRepositories(app),
         request: supertest(apiUrl),
         requestGql: supertest(gqlUrl).post(''),
-        subscribeGql: (query: string) => supertestWs(gqlUrl).subscribe(query),
+
+        subscribeGql: (args: { query: string; variables?: Object; authToken?: string }) =>
+            getNetworkInterface(args.authToken)
+                .request({
+                    query: args.query,
+                    variables: args.variables,
+                })
+                .subscribe({
+                    next({ data, errors }) {
+                        subScriptionResult.data = data
+                        subScriptionResult.errors = errors
+                    },
+                }),
     }
 }
 

@@ -76,9 +76,9 @@ export const sendMessageMutationGqlRequest = (
             $text: String!) {
             sendMessage(conversationId:$conversationId, text: $text){
                 author {
-                email
-                id
-                userName
+                    email
+                    id
+                    userName
                 }
                 createdAt
                 id
@@ -101,6 +101,7 @@ export const getConversationMessagesSub = (
                 author {
                   id
                   email
+                  userName
                 }
                 id
                 text
