@@ -19,7 +19,6 @@ import { ConversationUser, Conversation as GqlConversation, Message } from '../r
 import {
     createConversationMutationGqlRequest,
     findUsersGqlRequest,
-    getConversationMessagesSub,
     getUserConversationGqlRequest,
     sendMessageMutationGqlRequest,
 } from './helpers'
@@ -200,33 +199,5 @@ describe('ConversationResolver - smoke test', () => {
             name: expect.any(String),
             participants: expect.any(HasMany),
         } satisfies ConversationData)
-    })
-
-    it('should get unauthorized error, when subscriptions attempts to access conversation not participated by a user', async () => {
-        const anotherUser = await userMock.random.createOne({}, testModule)
-        const { conversation } = await conversationMock.createOne(
-            {
-                conversation: {
-                    lastMessageAt: null,
-                    name: faker.internet.userName(),
-                },
-                user: anotherUser,
-            },
-            testModule,
-        )
-
-        const { query, variables } = getConversationMessagesSub({
-            conversationId: conversation.id,
-        })
-
-        const { data, errors } = await (
-            await testModule.subscribeGql(query).variables({ ...variables })
-        ).next()
-
-        console.log(JSON.stringify(errors))
-
-        console.log({ data })
-
-        // responseContainsNoErrors(body)
     })
 })
