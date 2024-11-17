@@ -5,7 +5,8 @@ import { IMessageRepository } from '@root/common/repositories/message.repository
 import { IUserRepository } from '@root/common/repositories/user.repository'
 import { PrismaService } from '@root/infrastructure/prisma/prisma.service'
 
-export const cleanDb = (module: TestingModule | INestApplication) => {
+// eslint-disable-next-line require-await
+export const cleanDb = async (module: TestingModule | INestApplication) => {
     const prisma = module.get<PrismaService>(PrismaService)
     return async () => {
         await prisma.message.deleteMany({})

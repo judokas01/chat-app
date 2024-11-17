@@ -20,6 +20,7 @@
     "check:build": "tsc --p apps/chat-app/tsconfig.app.json --noEmit",
     "test": "yarn _test:generate-gql && yarn _with-test-env vitest --run",
     "gql:gen": "yarn _test:generate-gql && yarn _test:generate-gql-types",
+    "seed": "yarn _run apps/chat-app/src/scripts/seed-dev.ts",
     "_test:generate-gql": "yarn _run apps/chat-app/src/scripts/generate-gql-types.ts",
     "_test:generate-gql-types": "yarn graphql-codegen --config apps/chat-app/src/scripts/codegen.ts",
     "_run": "TS_NODE_PROJECT=apps/chat-app/tsconfig.app.json yarn ts-node -r tsconfig-paths/register --esm",

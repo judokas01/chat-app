@@ -65,7 +65,8 @@ export const getTestModuleWithInterface = async (args: {
     }
 
     return {
-        cleanDb: () => {
+        // eslint-disable-next-line require-await
+        cleanDb: async () => {
             subScriptionResult.data = undefined
             subScriptionResult.errors = undefined
             return cleanDb(app)
