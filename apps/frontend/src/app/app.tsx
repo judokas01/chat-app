@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 
 import { Route, Routes, Link } from 'react-router-dom'
-import NxWelcome from './nx-welcome'
+import { Login } from '../pages/login'
+import { Register } from '../pages/register'
 
 const StyledApp = styled.div`
     // Your style here
@@ -10,8 +11,6 @@ const StyledApp = styled.div`
 export function App() {
     return (
         <StyledApp>
-            <NxWelcome title="frontend" />
-
             {/* START: routes */}
             {/* These routes and navigation have been generated for you */}
             {/* Feel free to move and update them to fit your needs */}
@@ -26,6 +25,12 @@ export function App() {
                     <li>
                         <Link to="/page-2">Page 2</Link>
                     </li>
+                    <li>
+                        <Link to="/login">login</Link>
+                    </li>
+                    <li>
+                        <Link to="/register">register</Link>
+                    </li>
                 </ul>
             </div>
             <Routes>
@@ -38,16 +43,9 @@ export function App() {
                         </div>
                     }
                 />
-                <Route
-                    path="/page-2"
-                    element={
-                        <div>
-                            <Link to="/">Click here to go back to root page.</Link>
-                        </div>
-                    }
-                />
+                <Route path="/login" element={<Login></Login>} />
+                <Route path="/register" element={<Register></Register>} />
             </Routes>
-            {/* END: routes */}
         </StyledApp>
     )
 }

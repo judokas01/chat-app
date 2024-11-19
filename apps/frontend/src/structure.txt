@@ -1,0 +1,18 @@
+my-react-app/
+├── public/
+│   ├── index.html         # Main HTML file
+│   ├── favicon.ico        # Favicon
+│   └── assets/            # Static files (images, fonts, etc.)
+├── src/
+│   ├── assets/            # Images, fonts, and other static assets
+│   ├── components/        # Reusable UI components (Buttons, Cards, etc.)
+│   ├── pages/             # Page components (Home, About, etc.)
+│   ├── App.js             # Main application component
+│   ├── index.js           # Entry point for React app
+│   ├── styles/            # Global styles (CSS, SASS, etc.)
+│   ├── utils/             # Utility functions (helpers, services, API calls, etc.)
+│   └── App.css            # CSS file for App component (or use separate files for components)
+├── .gitignore             # Git ignore file
+├── package.json           # Project metadata and dependencies
+├── README.md              # Project documentation
+└── node_modules/          # Node.js modules (auto-generated after install)
