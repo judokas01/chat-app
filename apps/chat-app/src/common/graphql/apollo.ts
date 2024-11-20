@@ -18,6 +18,7 @@ export const apolloModuleUseTypes = GraphQLModule.forRoot<ApolloDriverConfig>({
     installSubscriptionHandlers: true,
     playground: true,
     sortSchema: true,
+
     subscriptions: {
         'subscriptions-transport-ws': {
             onConnect: (connectionParams: ConnectionParams) => {
