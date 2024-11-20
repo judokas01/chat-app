@@ -1,21 +1,24 @@
-// src/components/Login.tsx
 import React, { useState, ChangeEvent, FormEvent } from 'react'
+import { loginQuery } from '../../utilties/gql/queries'
+import { client } from '../../utilties/gql/apollo'
 
 // Define the types for the state
 interface LoginState {
-    email: string
+    userName: string
     password: string
 }
 
 export const Login = () => {
-    const [loginState, setLoginState] = useState<LoginState>({ email: '', password: '' })
+    const [loginState, setLoginState] = useState<LoginState>({ password: '', userName: '' })
 
     // Handle form submission
     const handleLogin = (e: FormEvent) => {
         e.preventDefault()
         // Log email and password (for now)
-        console.log('Email:', loginState.email)
+        console.log('userName:', loginState.userName)
         console.log('Password:', loginState.password)
+
+        loginQuery({ password: loginState.password, userName: loginState.userName }, client).then()
 
         // TODO: Add actual login logic
     }
@@ -34,13 +37,13 @@ export const Login = () => {
             <h2>Login</h2>
             <form onSubmit={handleLogin}>
                 <div className="input-group">
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="userName">Username</label>
                     <input
-                        type="email"
-                        id="email"
-                        value={loginState.email}
+                        type="username"
+                        id="userName"
+                        value={loginState.userName}
                         onChange={handleInputChange}
-                        placeholder="Enter your email"
+                        placeholder="Enter your username"
                         required
                     />
                 </div>
