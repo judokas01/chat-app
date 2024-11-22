@@ -32,7 +32,7 @@ export const getTestModule = async (args: {
         ],
     }).compile()
 
-    return { cleanDb: cleanDb(module), module, repositories: getRepositories(module) }
+    return { cleanDb: () => cleanDb(module), module, repositories: getRepositories(module) }
 }
 
 export type TestModule = Awaited<ReturnType<typeof getTestModule>>
